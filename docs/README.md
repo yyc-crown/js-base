@@ -1682,3 +1682,455 @@ var str = `abcdefghkfffdsxv`;
 
 
 
+# WebAPI
+
+## 01-JS-组成
+
+- js组成：
+
+  * ES:前六天基础知识
+  * DOM：文档对象模型，树状结构当做对象模型
+    - DOM节点：HTML 标签（标签属性、标签内的文本）；
+
+  * BOM：浏览器当做一个对象
+
+## 02-获取元素对象（DOM节点）的方法
+
+- 小括号里面：放入字符串；
+
+| 方法                        | 语法                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| 通过id名                    | var search = document.getElementById('search');//返回的为单个DOM节点 |
+| 通过标签名                  | var tagName = document.getElementsByTagName("input");//返回的为伪数组，可以遍历 |
+| 通过类名                    | var ipt = document.getElementsByClassName('ipt');//返回的为伪数组，可以遍历 |
+| 通过css选择器（单个选择器） | document.querySelector(css选择器);//返回的为单个DOM节点      |
+| 通过css选择器（单个选择器） | document.querySelectorAll(css选择器1,css选择器2...);//返回的为一个伪数组，**这个伪数组可以用forEach循环遍历**。 |
+
+## 03-事件类型
+
+- onclick：用于鼠标点击之后发生的响应。//必须先获取DOM节点，之后再进行注册事件
+
+  ```js
+  语法：
+  DOM节点.onclick=function() {
+      //函数体
+      //用户点击之后才执行；
+  }
+  
+  
+  
+  
+  	//案例需求：一个按钮控制开关灯
+      // 按开灯时：页面变白，按钮文字变为关灯
+      //  按关灯时：页面变黑，按钮文字变为开灯
+  
+      // 获取DOM值
+      var btn = document.getElementById("btn");
+      var value;
+      // 注册事件
+      btn.onclick = function() {
+          // 点击之后的效果
+          value = btn.value;
+          if (value == "开灯") {
+              document.body.style.backgroundColor = "#fff";
+              btn.value = "关灯";
+          } else {
+              document.body.style.backgroundColor = "#000";
+              btn.value = "开灯";
+          }
+      }
+  
+  ```
+
+- 下面的注册事件针对有光标的标签input textarea;
+
+  
+
+  * onbulr：无光标时，焦点消失
+
+    ```js
+    DOM节点名.onbulr=function() {
+     //函数体
+     //用户点击之后才执行；
+    } 
+    ```
+
+    
+
+    
+
+    
+
+  * onfocus：有光标时，获得焦点 
+
+    ```js
+    DOM节点名.onfocus=function() {
+    //函数体
+    //用户点击之后才执行；
+    } 
+    ```
+
+- 补充鼠标三个事件类型
+
+  | 鼠标事件类型                | 语法                |
+  | --------------------------- | ------------------- |
+  | mousedown：鼠标按下时触发   | DOM节点.onmousedown |
+  | mousemove：鼠标移动时触发   | DOM节点.onmousemove |
+  | mouseup：鼠标弹起的时候触发 | DOM节点.onmouseup   |
+
+  
+
+
+
+
+## 04-操作标准样式属性
+
+- 标准属性：标签中本身带的属性
+  * 比如：img标签中的src、 input中的value属性、style属性
+  * 这些属性都可以看做对象，后面可直接修改属性样式，用“ . ”的方式即可
+  * 注意：**style属性只能获取行内样式，获取不到内嵌式和外链式对标签设置的样式**。
+
+```js
+//div为DOM节点名
+// 获取：只能获取行内样式；
+div.style.backgroundColor
+// 设置
+div.style.backgroundColor = ’#fff‘;
+```
+
+- **开关属性**：checked/selected/disabled ，这种只有两种状态的属性；
+
+  * 赋值：两个状态的值，布尔类型；
+
+  * 什么时候用？**当涉及到什么情况下执行某件事，什么情况下不执行时用**
+
+  * 什么DOM节点时有这样的属性：<input type="checkbox" name="check" id="ck"  />
+
+    ```js
+    var ck = document.getElementById('ck');
+    
+    ck.checked = true;
+    ck.checked = false;
+    ```
+
+    
+
+## 05-操作类样式属性-className
+
+- 类样式：DOM节点上的class属性；
+
+- 操作类样式的效果：可以添加或修改我们已经写好的类名，方便的更换样式；
+
+  ```js
+  // 如果要修改类样式，只需要把className修改一下就行了；
+  // 但是会直接覆盖
+  box.className = '新的类名';
+  
+  // 解决：在原来的基础上进行添加类名
+  box.className += '新的类名';
+  ```
+
+  
+
+## 06-操作类样式对象-classList
+
+- 对象：提供**多个方法**进行操作，操作更为简单；**比较好的方式解决上面的覆盖问题；**
+
+- 操作什么：类名；
+
+  ```js
+   // 参数：多个类名，之间用逗号隔开
+  //add：给元素对象添加一个或者多个类名，不会影响原来的类名；  
+   
+  box.classList.add(类名1,类名2...)；
+                     
+  // 参数：多个类名，可以是多个，多个之间用逗号隔开
+  //remove： 给元素删除一个或者多个类名
+  box.classList.remove(类名1,类名2...) 
+                                       
+   // 参数： 要切换的类名
+   //toggle：切换类名，
+  box.classList.toggle(类名)             
+  
+  
+  ```
+
+  
+
+## 07-操作自定义属性
+
+### 07-01-data-开头的自定义属性
+
+
+
+- 如何获取自定义属性：
+
+  * 自定义属性样式必须为：标签中：以**data-开头**
+
+  * 获取时：DOM名.dataset
+
+    ​              获取当个时：用下面的为力 input.data.src
+
+    ```js
+    命名: 在标签上已自定义属性 以 data-属性名
+    <input type="button" value="美女1" data-src="./images/01.jpg" />
+    ```
+
+    
+
+  * 返回的是对象，可以操作和修改样式
+
+    
+
+- this :事件执行函数：内部如何获取到DOM节点的自定义属性；可以通过标签，也可以通过this;
+
+- 案例-切换不同图片
+
+  ```js
+  // 需求：不同的按钮，切换不同的图片
+      // 获取所有DOM节点
+      // 思路：先获取到所有的DOM节点，之后循环遍历；找到每个节点，对每个节点进行操作，操作的信息用自定义类名的方式提前存在DOM节点中
+      var ipt = document.getElementsByClassName('ipt');
+      var img = document.getElementById('img');
+  
+  
+      // ipt为伪数组，可以循环遍历
+      for (var i = 0; i < ipt.length; i++) {
+          // 注册点击事件:点击不同的按钮，有不同的图片切换 
+          ipt[i].onclick = function() {
+              img.src = this.dataset.src;
+          }
+  
+  
+      }
+  ```
+
+
+### 07-02-自定义属性的灵活操作（推荐使用）
+
+- 语法：自定义的属性名可以随便取
+
+- 作用：根据属性名获取属性值
+
+  ```js
+      // 获取属性值
+      // 获取自定义的属性值
+      var id = document.getElementById('box');
+      console.log(id.getAttribute('abc'));
+      // 添加或修改属性名的值：需要两个参数
+      // 添加
+      id.setAttribute('ff', '你好');
+      // 修改
+      id.setAttribute('index', '你好');
+  
+      // 删除属性某个属性
+      id.removeAttribute('index');
+  ```
+
+  
+
+  
+
+## 08-全选和反选案例
+
+```js
+// 需求：全选和取消
+    // 上面的盒子选中，子盒子选中
+    // 上面的盒子取消，子盒子取消选中
+    // 获取DOM节点
+    var checkAll = document.getElementById('checkAll');
+    var ck = document.getElementsByClassName('ck');
+
+
+    checkAll.onclick = function() {
+        // console.log(checkAll.checked);
+        // 遍历子盒子
+        for (let i = 0; i < ck.length; i++) {
+            ck[i].checked = checkAll.checked;
+
+        }
+
+    }
+
+
+    // 需求：反选
+    // 下面的盒子都选中时，上面的盒子选中
+    // 下面的盒子只要有一个没有选中，上面的盒子也就没有选中
+    // 再遍历一遍子盒子
+    for (var j = 0; j < ck.length; j++) {
+        // 点击事件
+        ck[j].onclick = function() {
+            // 假设所有的子盒子都被选中，这时候需要设定一个变量区检验
+            var flag = true;
+            for (var k = 0; k < ck.length; k++) {
+                //判断子盒子是否被选中
+                if (ck[k].checked == false) {
+                    flag = false;
+                    break;
+                }
+
+            }
+
+            // 循环结束后，判定flag的值
+            if (flag == true) {
+                checkAll.checked = true;
+            } else {
+                checkAll.checked = false;
+            }
+        }
+    }
+```
+
+## 09-注册事件！！！
+
+### 09-01-on事件名
+
+- 本质相当于是把一个函数存储到 了 on 这个属性里面 ， 后面被重复赋值了，会覆盖；on的方式注册，
+- 无法多次注册；团队协作时，有可能别人写的代码，会把你的覆盖了。
+
+### 09-02-添加事件监听（推荐使用）
+
+- 作用：addEventListener：添加事件监听，可以多次注册事件
+
+- 语法：
+
+  ```js
+  DOM节点.addEventListener('事件类型'，function（) {
+      
+  });
+  
+  //语法：
+  btn.addEventListener('click', function() {
+          console.log(1);
+  
+   })；
+  
+  ```
+## 10-事件对象！！！
+
+- 对象：属性和方法的集合；
+
+- 属性：
+
+  ```js
+  // 鼠标位置
+  
+  // 可视区域坐标系 - 以浏览器的可视区域的左上角为原点的
+  // 可视区域：就是元素用来显示内容的区域
+  事件对象.clientX
+  事件对象.clientY
+  
+  // 页面坐标系  -  以body的左上角作为原点
+  事件对象.pageX
+  事件对象.pageY
+  
+  
+  // 事件的目标对象，点击谁用到谁上；
+  事件对象.target
+  
+  // 事件的绑定对象，就是是绑定在哪个DOM节点上 和 this一样
+  // 前面说的事件源
+  e.currentTarget==this -----> true
+  ```
+
+
+- 方法：
+
+  ```js
+  // 阻止默认行为；
+   var dom_a = document.querySelector("#box_a");
+  dom_a.addEventListener('click', function(e) {
+  //   // 阻止默认行为
+     e.preventDefault();
+   });
+  
+  
+  // 阻止冒泡
+  事件对象.stopPropagation();
+  ```
+
+  
+
+## 11-事件三阶段
+
+### 11-01-捕获和冒泡
+
+- 捕获：从根部往目标DOM节点上，一层一层的找，捕获是用户点击了那个DOM节点；
+
+  - 冒泡：从目标节点到跟接单；
+  - 冒泡执行：**事件默认是在冒泡阶段执行；**当我们目标DOM节点注册了事件，冒泡往上的DOM节点也注册了同样的事件话，也会执行；
+
+### 11-02-阻止冒泡
+
+```js
+ // 要阻止冒泡，需要先得到事件对象，给处理程序添加一个形参即可
+  erzi.addEventListener('click', function(e) {
+    // 调用阻止事件冒泡的方法进行阻止
+    // x希望在哪儿阻止冒泡，就在哪儿添加形参，形参中有很多属性，相当于一个对象
+    // 用形参自身的属性阻止e.stopPropagation()；
+    e.stopPropagation();
+    console.log('我是你儿子');
+  });
+```
+
+
+
+- 注意：
+  * 一定要传入形参e;
+  * 方法写在函数里，位置无所谓；
+
+## 12-获取元素对象位置
+
+- 语法：获取元素距离参考父亲的左边和上边的值；
+
+```js
+// 得到的是某个元素距离他的offsetParent元素的水平距离
+// 元素.offsetLeft = marginLeft + left
+元素.offsetLeft 
+
+// 得到的是某个元素距离他的offsetParent元素的垂直距离
+// 元素.offsetTop = marginTop + top
+元素.offsetTop 
+
+// 找到一个有定位的父亲元素进行参考，如果亲生父亲没有定位，会一直往上找，直到找打有定位的父亲，或者body；
+元素的offsetParent
+```
+
+## 13-事件解绑
+
+- 案例：抽奖——开关思想
+  * 在全局设置变量，初始化没有点击
+  * 点击事件内部：
+    - 如果没有点击：旋转下，点击的证明；
+    - 点击过了：没有任何反应；
+- 缺点：就是因为你设置的全局开关，在控制台可以获取到，可以重新赋值；
+- 需要用到解绑：更为安全
+
+```js
+//两种方法：两种方法不能混用
+//第一种
+var btn = document.getElementById('btn');
+btn.onclick = function(){
+  btn.onclick = null;
+  console.log('谢谢惠顾');
+}
+//第二种
+var btn = document.getElementById('btn');
+btn.addEventListener('click',function fn(){
+  // 解绑 当前的函数
+  btn.removeEventListener('click',fn);
+  console.log('抽奖了');
+})
+```
+
+## 14-事件委托
+
+* 什么是事件委托？
+  - 把事件注册在父级的元素身上，
+  - 利用事件冒泡执行，当事件传播到已经注册了事件的父级元素身上，
+  - 判断  触发事件的DOM  （e.target）节点是否是指定的元素，e.target.nodeName=="LI"
+    - 如果是，就执行逻辑，
+    - 否则什么都不管；
+* **什么时候用？**
+  *   **当我们需要给动态创建（不是一开始写死的，是后期可能会变的元素）的元素实现注册事件的效果的时候；**
+* 把原理理解一下就行，不需要自己实现，还需要理解事件委托的使用场景，以后我们会在jq阶段学习一个别人封装好的事件委托;
