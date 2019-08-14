@@ -1682,7 +1682,7 @@ var str = `abcdefghkfffdsxv`;
 
 
 
-# WebAPI
+# WebAPI-DOM
 
 ## 01-JS-组成
 
@@ -1694,7 +1694,9 @@ var str = `abcdefghkfffdsxv`;
 
   * BOM：浏览器当做一个对象
 
-## 02-获取元素对象（DOM节点）的方法
+## 02-获取元素对象（DOM节点）
+
+### 02-01-通过方法获取
 
 - 小括号里面：放入字符串；
 
@@ -1705,6 +1707,40 @@ var str = `abcdefghkfffdsxv`;
 | 通过类名                    | var ipt = document.getElementsByClassName('ipt');//返回的为伪数组，可以遍历 |
 | 通过css选择器（单个选择器） | document.querySelector(css选择器);//返回的为单个DOM节点      |
 | 通过css选择器（单个选择器） | document.querySelectorAll(css选择器1,css选择器2...);//返回的为一个伪数组，**这个伪数组可以用forEach循环遍历**。 |
+
+### 02-02-通过属性获取
+
+| 属性                                                         | 语法                          |
+| ------------------------------------------------------------ | ----------------------------- |
+| **获取子元素**：可以得到某个元素之下的所有的子元素的集合，一个伪数组 | 父元素.children();            |
+| **获取父元素**：返回一个；                                   | 元素.parentNode();            |
+| **获取兄弟元素**：得到下一个兄弟元素                         | 元素.nextElementSibling()     |
+| **获取兄弟元素**：得到上一个兄弟元素                         | 元素.previousElementSibling() |
+### 02-03-通过BOM方法获取DOM节点
+
+- 语法：
+
+  var res = window.getComputedStyle(元素对象，即DOM节点)；
+
+  返回的为字符串；
+
+  ```js
+   // DOM.style.
+    var box = document.querySelector(".box");
+  
+    // DOM节点 属性方式 只能获取行内样式；
+    // console.log(box.style);
+  
+  
+    // BOM:返回所有（无论是行内还是非行内）的样式集合，对象。
+    var res = window.getComputedStyle(box);
+    
+    // 属性值：字符串； res.width res.fontSize
+  ```
+
+  
+
+- **优点**：可以获得css的全部样式；
 
 ## 03-事件类型
 
@@ -1770,22 +1806,66 @@ var str = `abcdefghkfffdsxv`;
     } 
     ```
 
-- 补充鼠标三个事件类型
+- **鼠标的事件类型**
 
   | 鼠标事件类型                | 语法                |
   | --------------------------- | ------------------- |
   | mousedown：鼠标按下时触发   | DOM节点.onmousedown |
   | mousemove：鼠标移动时触发   | DOM节点.onmousemove |
   | mouseup：鼠标弹起的时候触发 | DOM节点.onmouseup   |
+  | mouseover：鼠标移入时触发   | DOM节点.onmouseover |
+  | mouseout：鼠标移出时触发    | DOM节点.onmouseout  |
 
-  
+
+- **键盘事件**
+
+  | 键盘事件          | 语法              |
+  | ----------------- | ----------------- |
+  | 按键按下：keydown | DOM节点.onkeydown |
+  | 按键弹起：keyup   | DOM节点.onkeyup   |
 
 
+* **触摸事件**:推荐使用addEventListener的方式注册：有很多移动端的事件，都是后面h5或者c3才出现的，on的方式没有对应的属性
 
+  | 触摸事件                                         |
+  | ------------------------------------------------ |
+  | touchstart - 会在手指触摸到屏幕的时候触发        |
+  | touchmove - 会在手指触摸到屏幕，移动的过程中触发 |
+  | touchend - 会在手指离开屏幕的瞬间触发            |
+
+  - **事件对象属性：触摸点**
+
+    ```js
+    事件对象.touches - 屏上面的触摸点
+    事件对象.targetouches - 元素上面的触摸点
+    事件对象.changedTouches - 变化的触摸点
+    ```
+
+    
+
+- 用于表单状态的改变事件：**onchange**
+
+  - 触发满足的两个条件
+    - 当前对象属性改变，并且是由键盘或鼠标事件激发的，脚本触发无效
+    - 当前对象失去焦点
+  - 可使用的元素：input，select，textarea
+
+- **oninput**事件：只有当表单元素发生改变时调用，元素变化，立即触发方法
+
+  - 可使用元素：
+
+    ```js
+    <input type="password">
+    <input type="search">
+    <input type="text">
+    <textarea></textarea>
+    ```
+
+    
 
 ## 04-操作标准样式属性
 
-- 标准属性：标签中本身带的属性
+- **标准属性**：标签中本身带的属性
   * 比如：img标签中的src、 input中的value属性、style属性
   * 这些属性都可以看做对象，后面可直接修改属性样式，用“ . ”的方式即可
   * 注意：**style属性只能获取行内样式，获取不到内嵌式和外链式对标签设置的样式**。
@@ -1813,7 +1893,6 @@ div.style.backgroundColor = ’#fff‘;
     ck.checked = false;
     ```
 
-    
 
 ## 05-操作类样式属性-className
 
@@ -1929,9 +2008,49 @@ div.style.backgroundColor = ’#fff‘;
 
   
 
+##  08-位置
+
+### 08-01- 获取元素的实际宽度和高度
+
+
+
+- 元素的实际宽高 = border+padding+content（width和height）
+
+  ```js
+  // 返回值：数值；
+  
+  // 只能进行获取；
+  // 元素的实际宽度
+  元素.offsetWidth 
+  // 元素的实际高度
+  元素.offsetHeight
+  
+  // 获取和设置
+  dom.style.width；
+  ```
+
   
 
-## 08-全选和反选案例
+### 08-02-获取元素对象 位置
+
+- 元素对象的位置：获取到的是数值；
+
+```js
+// 得到的是某个元素距离他的offsetParent元素的水平距离
+// 元素.offsetLeft = marginLeft + left
+元素.offsetLeft 
+
+// 得到的是某个元素距离他的offsetParent元素的垂直距离
+// 元素.offsetTop = marginTop + top
+元素.offsetTop 
+
+// 找到一个有定位的父亲元素进行参考，如果亲生父亲没有定位，会一直往上找，直到找打有定位的父亲，或者body；
+元素的offsetParent
+```
+
+
+
+## 09-全选和反选案例
 
 ```js
 // 需求：全选和取消
@@ -1981,14 +2100,14 @@ div.style.backgroundColor = ’#fff‘;
     }
 ```
 
-## 09-注册事件！！！
+## 10-注册事件！！！
 
-### 09-01-on事件名
+### 10-01-on事件名
 
 - 本质相当于是把一个函数存储到 了 on 这个属性里面 ， 后面被重复赋值了，会覆盖；on的方式注册，
 - 无法多次注册；团队协作时，有可能别人写的代码，会把你的覆盖了。
 
-### 09-02-添加事件监听（推荐使用）
+### 10-02-添加事件监听（推荐使用）
 
 - 作用：addEventListener：添加事件监听，可以多次注册事件
 
@@ -2006,7 +2125,9 @@ div.style.backgroundColor = ’#fff‘;
    })；
   
   ```
-## 10-事件对象！！！
+## 11-事件对象！！！
+
+### 11-01-事件对象
 
 - 对象：属性和方法的集合；
 
@@ -2049,18 +2170,27 @@ div.style.backgroundColor = ’#fff‘;
   事件对象.stopPropagation();
   ```
 
+### 11-02-阻止a标签转跳
+
+  ```js
+  // 阻止a标签转跳
+  // 1 把a标签的href属性设置为 javascript:void(0);
+  // 2 在a标签的点击事件里面，return false;
+  // 3 使用事件对象.preventDefault();
+  ```
+
   
 
-## 11-事件三阶段
+## 12-事件三阶段
 
-### 11-01-捕获和冒泡
+### 12-01-捕获和冒泡
 
 - 捕获：从根部往目标DOM节点上，一层一层的找，捕获是用户点击了那个DOM节点；
 
   - 冒泡：从目标节点到跟接单；
   - 冒泡执行：**事件默认是在冒泡阶段执行；**当我们目标DOM节点注册了事件，冒泡往上的DOM节点也注册了同样的事件话，也会执行；
 
-### 11-02-阻止冒泡
+### 12-02-阻止冒泡
 
 ```js
  // 要阻止冒泡，需要先得到事件对象，给处理程序添加一个形参即可
@@ -2079,7 +2209,7 @@ div.style.backgroundColor = ’#fff‘;
   * 一定要传入形参e;
   * 方法写在函数里，位置无所谓；
 
-## 12-获取元素对象位置
+## 13-获取元素对象位置
 
 - 语法：获取元素距离参考父亲的左边和上边的值；
 
@@ -2096,7 +2226,7 @@ div.style.backgroundColor = ’#fff‘;
 元素的offsetParent
 ```
 
-## 13-事件解绑
+## 14-事件解绑
 
 - 案例：抽奖——开关思想
   * 在全局设置变量，初始化没有点击
@@ -2123,7 +2253,7 @@ btn.addEventListener('click',function fn(){
 })
 ```
 
-## 14-事件委托
+## 15-事件委托
 
 * 什么是事件委托？
   - 把事件注册在父级的元素身上，
@@ -2131,6 +2261,1120 @@ btn.addEventListener('click',function fn(){
   - 判断  触发事件的DOM  （e.target）节点是否是指定的元素，e.target.nodeName=="LI"
     - 如果是，就执行逻辑，
     - 否则什么都不管；
+
 * **什么时候用？**
+
   *   **当我们需要给动态创建（不是一开始写死的，是后期可能会变的元素）的元素实现注册事件的效果的时候；**
+
 * 把原理理解一下就行，不需要自己实现，还需要理解事件委托的使用场景，以后我们会在jq阶段学习一个别人封装好的事件委托;
+
+* **注意**：
+
+  - 解决：多次注册事件的问题；新增节点没有事件的问题；
+
+  - 实现：通过在父级DOM节点注册事件，利用事件冒泡的执行机制，判断当前点击的对象是不是需要的节点；执行相应的逻辑；
+  - 场景：给动态新增的DOM节点拥有相同的事件；
+
+## 16-DOM节点的创建-修改-添加-删除
+
+- 创建
+
+  * innerHTML
+  * document.write();
+  * **document.creatElement('li');**
+
+- 添加
+
+  * 父节点.appendChild(新的DOM节点)：从后添加的DOM节点
+  * 父节点.insertBefore(新的DOM节点,插入谁之前的DOM节点):有两个参数，在某个元素之前，添加新的DOM节点；
+
+- 修改
+
+  * innerHTML:结构
+
+  * innerText：文本内容；
+
+    
+
+- 删除
+
+  * 父亲节点.removeChild(被删除的节点)；
+
+
+
+# WebAPI-BOM
+
+## 01-BOM-window及onload
+
+- BOM学习的对象：window上面的属性和方法；
+- onload：等待静态资源加载完成后执行你的逻辑；
+
+```js
+  window.onload = function() {
+    // 静态资源全部加载完成后，才执行这个函数；
+    // 对图片进行操作
+    // 等待图片下载完成后,才能进行操作;
+  }
+```
+
+
+
+
+
+## 02-BOM-定时器-语法
+
+```js
+  // 语法: 一次性定时器;
+  // es6:函数写法：() => {}
+  // timeout：毫秒数
+
+  // 作用：延迟一定时间执行；
+  // var timer = setTimeout(function() {
+  //   alert(1)
+  // }, 3000);
+
+
+  // 返回值；返回这个定时器的ID，用于清除定时器；
+  // var btn = document.querySelector("#stop");
+  // btn.onclick = function() {
+  //   clearTimeout(timer);
+  // };
+
+
+  // 语法：永久定时器
+  // 不是一瞬间执行，等待1000后，开启你的定时器；
+  // 返回值：ID
+  var timer = setInterval(function() {
+    // document.write("123</br>")
+    console.log(1);
+  }, 1000);
+
+
+  // 
+  var btn = document.querySelector("#stop");
+  btn.onclick = function() {
+    clearInterval(timer);
+  };
+```
+
+### 倒计时案例
+
+- 实现：点击后
+  - 按钮禁用；
+  - 开启倒计时：
+    - 间隔1秒才执行，需要在点击之后，立马执行一次；
+    - 变量每次 miao--;
+    - 当秒miao到了某个值的时候：清除定时器、去除按钮的禁用、恢复原来的文字；
+
+```js
+ btn.onclick = function() {
+    // 3.点击之后有效果？
+    // 3.1 按钮不能点了
+    btn.disabled = true;
+
+    // 3.2 开启倒计时
+    var miaoshu = 5;
+
+    // 立即执行；
+    btn.value = `获取验证码【${miaoshu}】`;
+
+    // 无限次定时器
+    var timer = setInterval(function() {
+
+      // 
+      miaoshu--;
+
+      // 当==1的时候
+      btn.value = `获取验证码【${miaoshu}】`;
+
+      // 判断：miaoshu到哪了？到达1的时候要清除定时器
+      if (miaoshu == 0) {
+        // 清除定时器
+        clearInterval(timer);
+
+        // 把禁用的属性关了
+        btn.disabled = false;
+
+        // 本身的文字恢复
+        btn.value = "获取验证码";
+      }
+
+    }, 1000);
+
+  }
+```
+
+
+
+## 03-BOM-location
+
+- 语法：负责管理浏览器地址栏相关的行为和信息的对象；
+
+```js
+// 转跳你需要的地址；
+    window.location.href = "http://www.baidu.com"
+```
+
+## 04-BOM-localStorage
+
+- 作用：实现数据本地化，刷新后还在；
+
+```js
+  // 作用:可以使我们的数据本地化，刷新后还在；
+  // 储存一条数据
+  // localStorage.setItem("name", "张三");
+  // localStorage.setItem("age", 12);
+  // localStorage.setItem("zhiye", "前端工程师");
+
+
+  // 获取刚才的数据：现在是直接读取浏览器数据
+  // var a = localStorage.getItem("name");
+  // console.log(a);
+
+  // 没有的值的话，返回一个null;
+  // var b = localStorage.getItem("age");
+  // console.log(b);
+
+
+  // 删除数据:某条数据
+  // localStorage.removeItem("name");
+
+
+  // 全部清除
+  localStorage.clear();
+```
+
+
+
+## 05-BOM-JSON
+
+- 作用：把对象类型转为JSON格式的字符串；
+- JSOM上的**方法**：
+
+```js
+// 将对象转换为json格式的字符串
+// 返回值：一个满足json格式的 字符串
+JSON.stringify(对象);
+
+// 将json格式的字符串转换为对象
+// 返回值：依赖于你的json格式字符串，可能返回数组，或者是对象....
+JSON.parse(json格式字符串);
+```
+
+## 06-本地化的步骤
+
+- 第一步：将HTML结构中的数据抽象为一定格式的数组
+
+- 第二步：将得到的数组存到本地
+
+  - 1.转JSON格式：*var str = JSON.stringify(arr);*
+
+  - 2.存储：*localStorage.setItem("list", str);*
+
+  - 3.读取： var list = localStorage.getItem("list");
+
+  - 4.转为约定的格式：JSON.parse(list)；
+
+  - 注意：转格式和读取时必须用变量接收；
+
+    
+
+- 第三步：将HTML结构用渲染出来（列表初始化）
+
+  * 新增DOM节点
+
+  * 修改DOM节点内容（html结构）
+
+  * 插入列表中
+
+    
+
+## 07-微博案例
+
+- 列表初始化
+- 新增微博
+
+  - DOM操作：
+
+    - 新增DOM节点
+
+    - 修改新增DOM节点内容
+
+    - 插入列表
+  - 数据操作
+- 删除微博
+  - 事件委托----------DOM操作
+  - 数据操作
+
+   
+
+```js
+ function patchZero(v) {
+        return v < 10 ? '0' + v : v;
+    }
+
+    function formatDate() {
+        var now = new Date();
+        var y = now.getFullYear();
+        var m = now.getMonth() + 1;
+        var d = now.getDate();
+        var h = now.getHours();
+        var mm = now.getMinutes();
+        var s = now.getSeconds();
+        return y + '-' + patchZero(m) + '-' + patchZero(d) + ' ' + patchZero(h) + ":" + patchZero(mm) + ':' + patchZero(s);
+    }
+    // ---------------------------列表初始化-------------------------------
+    // 约定一个格式，数组里面包对象
+    // 把写在HTML里的结构抽象为一个数组，格式如下：
+    // var arr = [{
+    //     content: "快来收了这九款用上就停不下来的应用吧！！",
+    //     ID: ID,
+    //     time: "2019-7-26 15:25:56",
+    // }, {
+    //     content: "快来收了这九款用上就停不下来的应用吧！！",
+    //     ID: ID,
+    //     time: "2019-7-26 15:25:56",
+    // }, {
+    //     content: "快来收了这九款用上就停不下来的应用吧！！",
+    //     ID: ID,
+    //     time: "2019-7-26 15:25:56",
+    // }, ];
+    // // // //本地初始化
+    // // // // 第一步：转格式
+    // var str = JSON.stringify(arr);
+    // // // // 第二步：存储
+    // localStorage.setItem("list", str);
+    // 第三步：读取
+    var list = localStorage.getItem("list");
+
+    // 进行优化
+    // 如果本地没有数据
+    var ID = `${Date.now()}.${Math.random()}`;
+    var arr;
+    if (list == null) {
+        arr = [];
+    } else {
+        arr = JSON.parse(list);
+    };
+    // ----------渲染-----------
+    var ul = document.querySelector('.weibo-list');
+    for (var i = 0; i < arr.length; i++) {
+        //    新增DOM节点
+        var li = document.createElement('li');
+        // 修改DOM节点的内容
+        li.innerHTML = `<p class="content">${arr[i].content}</p>
+    <span class="del" ID=${arr[i].ID}>删除</span>
+    <em class="time">${arr[i].time}</em>`;
+        // 插入
+        ul.appendChild(li);
+
+    }
+
+
+
+    // -----------------------------新增一条微博
+    // 需求：点击发布时，文本域内容发布
+    // 获取DOM节点
+    var btn = document.querySelector('.weibo-btn');
+    var textarea = document.querySelector('.weibo-text');
+
+
+    // 注册事件
+    btn.onclick = function() {
+        // 先获取文本域的内容
+        var value = textarea.value;
+        var time = formatDate();
+
+        // 优化
+        if (value == "") {
+            alert('输入的文本内容不能为空');
+            return;
+        }
+        // 新增一个DOM节点
+        var new_li = document.createElement('li');
+        // 修改DOM节点的内容
+        new_li.innerHTML = `<p class="content">${value}</p>
+    <span class="del" ID=${ID}>删除</span>
+    <em class="time">${time}</em>`;
+        // 插入
+        // 需要找一个参考位置
+        var cankao = ul.children[0];
+        ul.insertBefore(new_li, cankao);
+        textarea.value = "";
+
+        // --------------数据操作
+        // 抽一条数据格式出来
+        var obj = {
+                ID: ID,
+                content: value,
+                time: time,
+            }
+            // 将选出来的数据插入原数组中
+        arr.unshift(obj);
+        // 转格式
+        var str = JSON.stringify(arr);
+        // 存储
+        localStorage.setItem('list', str);
+
+    }
+
+
+
+
+
+    // 组合键发布---------------------
+    textarea.onkeydown = function(e) {
+        // 按下Ctrl和enter键发布
+        if (e.ctrlKey && e.keyCode == 13) {
+            btn.onclick();
+        }
+    }
+
+    // ----------------------------删除------------------
+    // 事件委托
+    // 给ul做事件委托
+    ul.onclick = function(e) {
+        // 点谁是谁
+        if (e.target.nodeName == "SPAN") {
+            // 删除span所在的那一行
+            // 需要找到它的父亲
+            var parent = e.target.parentNode;
+            // 删除
+            ul.removeChild(parent);
+
+
+            // 数据操作---------------------------------
+            // 需求：需要找到要删除某个特定的元素，因此需要给要删除的元素进行唯一的标识
+            // 获得自定义属性
+            var ID = e.target.getAttribute('ID');
+
+            // 筛选数据，一个一个的过
+            for (var k = 0; k < arr.length; k++) {
+
+                // 判断
+                if (arr[k].ID == ID) {
+                    // 数组的删除
+                    arr.splice(k, 1);
+                    break;
+
+                }
+
+            }
+            // 存储
+            var str = JSON.stringify(arr);
+            localStorage.setItem('list', str);
+
+        }
+    }
+```
+
+## 08-轮播图流程
+
+### 思想：排它思想
+
+#### js中的操作
+
+- 第一步：页面加载完成后执行
+
+- 第二步：序号播放
+
+- 第三步：左右按钮播放
+
+- 第四步：左右联动序号
+
+- 第五步：序号联动左右
+
+- 第六步：自动播放和鼠标控制
+
+  ```js
+  // 介绍和序号轮播
+      // 页面加载完成之后再执行
+      window.onload = function() {
+          // 需求：鼠标移入小圆点中时，图片切换,实际上是ul的位置在变化
+          // 获取DOM节点
+          var point = document.querySelectorAll('.list i');
+          var ul = document.querySelector('#imglist');
+          var imgWidth = ul.children[0].offsetWidth;
+          var box = document.querySelector('#box');
+  
+          // 左右轮播
+          // 需求：点击右边按钮时，图片切换
+          // 获取DOM节点
+          var right = document.querySelector('.arrow-right');
+          var left = document.querySelector('.arrow-left');
+  
+          // 注册事件
+          // 右边按钮
+          var index = 0;
+          right.onclick = function() {
+              // 点击之后，图片切换
+              index++;
+              // 图片下标为0时，显示第一张图片
+              // 图片下标为1时，显示第2张图片
+              // 图片下标为2时，显示第3张图片
+              // 图片下标为5时，显示第6张图片
+              // 图片下标为6时，显示第1张图片
+              if (index == ul.children.length) {
+                  index = 0;
+              }
+              // 计算ul的位置
+              var num = index * imgWidth;
+              // 设置ul的偏移量,向左偏倚为负值
+              ul.style.left = `-${num}px`;
+              // 左右切换的index是全局的index，没有影响小圆点局部的index
+              // index:0,小圆点的index：1
+              // index:1,小圆点的index：2
+              // index:2,小圆点的index：3
+              for (var k = 0; k < point.length; k++) {
+                  point[k].classList.remove('current');
+              }
+              point[index].classList.add('current');
+          }
+  
+  
+          // 左边按钮
+          left.onclick = function() {
+              index--;
+              if (index == -1) {
+                  index = ul.children.length - 1;
+              }
+              // 计算ul的位置
+              var num = index * imgWidth;
+              // 设置ul的偏移量,向左偏倚为负值
+              ul.style.left = `-${num}px`;
+  
+              for (var k = 0; k < point.length; k++) {
+                  point[k].classList.remove('current');
+              }
+              point[index].classList.add('current');
+          }
+  
+          // 注册事件
+          // 对小圆点的每一个进行操作，需要遍历循环
+          for (var i = 0; i < point.length; i++) {
+  
+              // 需要提前将小圆点的下标存起来
+              point[i].index = i;
+              point[i].onmouseover = function() {
+                  // 鼠标移入时图片切换
+                  // 一个圆点对应一张图片
+                  for (var j = 0; j < point.length; j++) {
+                      // 排它思想
+                      point[j].classList.remove('current');
+  
+                  }
+                  this.classList.add('current');
+                  // 计算ul的位置
+                  // 下标为0时，往左挪动0个图片
+                  // 下标为2时，往左挪动2个图片
+                  // 下标为5时，往左挪动5个图片
+                  // ul的挪动距离=下标*一个图片的宽度
+                  // 需要获取一个图片的宽度
+                  var num = this.index * imgWidth;
+                  // 设置ul的偏移量,向左偏倚为负值
+                  ul.style.left = `-${num}px`;
+  
+              }
+  
+          }
+  
+          // 自动轮播:自动往右点击
+          // 设置定时器
+          var timer = setInterval(function() {
+              right.onclick();
+          }, 1000);
+  
+          // 鼠标移入时，清除定时器
+          box.onmouseover = function() {
+                  clearInterval(timer);
+              }
+              // 鼠标移除时，开启定时器
+          box.onmouseout = function() {
+              timer = setInterval(function() {
+                  right.onclick();
+              }, 1000);
+          }
+      }
+  ```
+
+#### jQuery** **里面的排他思想**
+
+- 想要多选一的效果，排他思想：当前元素设置样式，其余的兄弟元素清除样式。
+
+ ## 09-zepto 类库
+
+- 介绍
+  - 对原生JS的极好的封装；
+  - https://www.html.cn/doc/zeptojs_api/
+
+## 10-swiper-插件
+
+- 中文官网 ：https://www.swiper.com.cn/
+- 以后如果找一个插件，去到人家提供下载和demo的地方，先看看demo，是不是你想要的效果；如果确定了这就是你想要的效果，看**教程开始**学习
+
+# jQuery
+
+## 00-入口函数
+
+- 当script标签写在head中或者html结构之前时需要写入口函数
+
+  ```js
+  //第一种：
+  $(function () {
+      // 此处是页面 DOM 加载完成的入口
+  })
+  
+  //第二种
+  $(document).ready(function() {
+      // 此处是页面 DOM 加载完成的入口
+  })
+  ```
+
+  
+
+-  一般推荐使用第一种
+
+## 01-jQuery **对象和** **DOM** **对象**转化
+
+- DOM对象==>jQuery 对象: $(DOM对象)
+- jQuery 对象==>DOM对象:
+  - $('div') [index]       index 是索引
+  - $('div') .get(index)    index 是索引号  
+
+​	
+
+## 02-jQuery 常用API
+
+### 02-01-选择器
+
+-  **$(“选择器”)   // 里面选择器直接写 CSS 选择器即可，但是要加引号**     
+
+```
+$('#id')==》指定id元素
+
+$('*')==》所有元素
+
+$('.class')==》指定class元素
+
+$('div')==》根据标签获取元素
+
+$('div,p,li')==》获取多个
+
+$('li.class')==>交集获取
+
+$('ul>li')==>子代
+
+$('ul li')==>后代
+```
+
+### 02-02-隐式迭代
+
+- 遍历内部 DOM 元素（伪数组形式存储）的过程就叫做隐式迭代；
+
+### 02-03-jQuery筛选选择器
+
+```js
+$('li:first')：第一个元素
+
+$('li:last')：最后一个元素
+
+$('li:eq(2)')==》索引为2【查找指定索引的元素】
+
+$('li:odd')==》索引为奇数
+
+$('li:even')==》索引为偶数
+
+注意：索引是从0开始的
+```
+
+### 02-04-筛选方法
+
+```js
+$('li').parent()父级
+
+$('ul').children('li');子集【儿子级】【如果不加参数，获取所有的，如果添加指定的元素，按照指定的找】
+
+$('ul').find('li')后代【后代级】
+
+$('li').siblings('li')兄弟
+
+$('li'),nextAll();后面的
+
+$('li').prevAll();前面的
+
+判断是否具有某个类名：$('div').hasClass('aaa')
+
+$('div').eq(index);指定索引方法【eq推荐用方法】
+```
+
+- 重要： parent() 、 children()  、find() 、 siblings() 、 eq()；
+
+  
+
+## 03-jQuery样式操作
+
+### 03-01-操作CSS方式
+
+- **语法**：$().css(“属性”)
+
+  ​           $().css(“属性”，“属性值”)
+
+- 里面可以写一个或者两个参数，一个参数为获取，两个参数为获取
+
+### 03-02-设置类样式方法
+
+- **添加类**：.addClass("类名")
+- **删除类**：.removeClass("类名")
+- **切换类**：.toogleClass("类名")
+## 04-jQuery **效果**
+
+- 参数：三个参数都可以省略
+
+- speed：三种预定速度之一的字符串(“slow”,“normal”, or “fast”)或表示动画时长的毫秒数值(如：1000)
+
+- easing：(Optional) 用来指定切换效果，默认是“swing”，可用参数“linear”
+
+- fn：回调函数，表示在效果完成之后执行的函数
+
+  
+
+| 显示隐藏效果                   |
+| ------------------------------ |
+| .show([speed,[easing],[fn])    |
+| .hide([speed,[easing],[fn])    |
+| .toggle([speed,[easing],[fn]]) |
+
+  
+
+| 滑动效果                            |
+| ----------------------------------- |
+| .slideDown([speed,[easing],[fn]])   |
+| .slideUp([speed,[easing],[fn]])     |
+| .slideToggle([speed,[easing],[fn]]) |
+
+
+
+| 淡入淡出效果                                                 |
+| ------------------------------------------------------------ |
+| fadeIn([speed,[easing],[fn]])                                |
+| fadeOut([speed,[easing],[fn]])                               |
+| fadeToggle([speed,[easing],[fn]])                            |
+| fadeTo([[speed],opacity,[easing],[fn]])**【注意fadeTo必须写两个参数，speed和opacity】** |
+
+- 事件切换:hover([over,]out)
+
+  ```js
+  （1）over:鼠标移到元素上要触发的函数（相当于mouseenter）
+  mouseenter==mouseover
+  （2）out:鼠标移出元素要触发的函数（相当于mouseleave）
+  mouseleave==mouseout
+  （3）如果只写一个函数，则鼠标经过和离开都会触发它
+  ```
+
+- 动画队列及其停止排队方法:在动画前面加**.stop**即可避免
+- 自定义动画
+  - 语法：animate(params,[speed],[easing],[fn])；
+  - params: 想要更改的样式属性，以**对象**形式传递，必须写。 属性名可以不用带引号， 如果是复合属性则**需要采取驼峰命名法 **
+
+## 05-jQuery -属性操作（2种）
+
+### 05-01-固有属性
+
+- 语法：.prop（“属性”）;
+
+  ​           .prop（“属性”,"属性值"）;
+
+- 里面可以写一个或者两个参数，一个参数为获取，两个参数为获取；
+
+### 05-02-自定义属性
+
+- 语法：.attr（“属性”）;
+
+  ​           .attr（“属性”,"属性值"）;
+
+- 里面可以写一个或者两个参数，一个参数为获取，两个参数为获取
+
+### **05-03-数据缓存** **data()**【了解】
+
+- 当做变量存储
+
+-  **附加数据语法**
+
+  data(''name'',''value'')   // 向被选元素附加数据   
+
+  **获取数据语法**
+
+  data(''name'')             //   向被选元素获取数据 
+
+  ```js
+  data() 方法可以在指定的元素上存取数据，并不会修改 DOM 元素结构，所以元素上无法查看。一旦页面刷新，之前存放的数据都将被移除。
+  $('span').data('spanindex',3);
+  
+  console.log($('span').data('spanindex'));
+  
+  ```
+
+  
+
+## 06-jQuery内容文本值(3种)
+
+### 06-01-普通元素内容
+
+- 语法：.html（）;
+
+  ​           .html（内容）;
+
+- 里面可以写不写或者一个参数，没有参数为获取，一个参数为获取
+
+### 06-02-普通元素文本内容
+
+- 语法：.text（）;
+
+  ​           .text（内容）;
+
+- 里面可以写不写或者一个参数，没有参数为获取，一个参数为获取
+
+### 06-03-表单的值val(）
+
+- 语法：.val（）;
+
+  ​           .val（内容）;
+
+- 里面可以写不写或者一个参数，没有参数为获取，一个参数为获取
+
+## 07-jQuery -元素操作
+
+###  07-01-遍历：两种方法
+
+- 第一种：$("div").each(function(index, Ele) { xxx; }）
+
+  - **一般用于遍历元素**
+
+  ```js
+  	<div>1</div>
+      <div>2</div>
+      <div>3</div>
+  var arr = ["red", "yellow", "blue"];
+   $("div").each(function(i, elm) {
+          //     // i索引值
+          //     // elm为DOM元素，不能用.css的方法 
+          //     $(elm).css("background", arr[i]);
+   })
+  ```
+
+  
+
+- 第二种：$.each(object，function(index, element){ xxx;}）
+
+  - **一般用于遍历数据**
+
+```js
+var arr = ["red", "yellow", "blue"];
+$.each(arr, function(i, elm) {
+            console.log(i, elm);
+
+        })
+```
+
+### 07-02-创建
+
+- 语法：$(''<li></li>'');   
+
+### 07-03-添加
+
+- 内部添加
+  - 从后添加 .append();
+  - 从前添加 .prepend();
+- 外部添加
+  - 从后添加 .after();
+  - 从前添加.before();
+
+### 07-04-删除
+
+- .remove()===>把元素本身删除包括html中的结构
+- .empty()===>清空，页面上的内容没有了，但html结构还在
+- .html()===>页面上的内容没有了，但html结构还在
+
+## 08-jQuery **尺寸、位置操作**
+
+### 08-01-尺寸
+
+| 尺寸                                     | 备注                      |
+| ---------------------------------------- | ------------------------- |
+| .width()、       .height()               | 相当于获取的文本内容      |
+| .innerWidth()、  .innerHeight()          | 包含padding               |
+| .outerWidth()     .outerHeight()         | 包含padding+border        |
+| .outerWidth(true)     .outerHeight(true) | 包含padding+border+margin |
+
+- 以上参数为空，则是获取相应值，返回的是数字型。
+  如果参数为数字，则是修改相应值。
+  参数可以不必写单位。
+
+### 08-02-位置（3种）
+
+- offset():距离文档的距离
+
+  - 两个属性：[left，top]；
+  - 
+    - offset().left
+    - offset().top
+  - 可以设置元素的偏移：offset({ top: 10, left: 30 });**设置时以对象形式传**
+  - **返回的为对象**
+
+- position()：相对于**带有定位的父级**偏移坐标，如果父级都没有定位，则以文档为准。
+
+  - 两个属性：[left，top]；
+    - position().left
+    - position().top
+  - 该方法只能获取，不能设置
+  - 返回的为对象
+
+- scroll()：被选元素被卷去的部分
+
+  - 两个属性：[left，top]；
+
+    - scroll().left
+    - scroll().top
+
+  - **scroll事件**
+
+    - 谁有滚动条，注册给谁
+
+    - 如果是浏览器有滚动条的话，注册事件格式为
+
+      - $("body,,html").scrollTop(0);
+
+    - 自定义效果只能加给元素，不能加给document
+
+    - 一般用于回到顶部时的注册事件
+
+      - $("body,html").animate({
+
+        ​                scrollTop: 0
+
+        ​            }, 1000)
+
+    - 整个网页都有滚动条的话，滚动事件加给window
+
+
+
+## 09-jQuery事件
+
+### 09-01-on事件注册
+
+- 注册的多个事件，处理程序相同时，格式为
+
+  ```js
+  $("div").on("click mouseover mouseout",function() {
+      //处理程序相同
+  })
+  ```
+
+- 注册的多个事件，处理程序不同时，格式为
+
+  ```
+  $("div").on({
+      //属性名：属性值
+      click:function() {},
+      mouseover:function() {}
+  })
+  ```
+
+​	
+
+- **事件委托**
+
+  - 在此之前有bind(), live()，delegate()等方法来处理事件绑定或者事件委派，最新版本的请用on替代他们。
+
+    ```js
+    $('ul').on('click', 'li', function() {
+    
+    ​    alert('hello world!');
+    
+    }); 
+    ```
+
+    
+
+  - 动态创建的元素，click()没有办法绑定事件，on() 可以给动态生成的元素绑定事件
+
+    ```js
+    $(“div").on("click",”p”, function(){
+    
+    ​     alert("俺可以给动态生成的元素绑定事件")
+    
+     });
+    ```
+
+    
+
+### 09-02-off()解绑事件(3种写法)
+
+- 移除通过 on() 方法添加的事件处理程序。
+
+```js
+$("p").off() // 解绑p元素所有事件处理程序
+
+$("p").off( "click")  // 解绑p元素上面的点击事件 后面的 foo 是侦听函数名
+
+$("ul").off("click", "li");   // 解绑事件委托
+```
+
+- 如果有的事件只想触发一次， 可以使用**one()**来绑定事件。
+
+### 09-03-自动触发事件trigger()-3种形式
+
+- 语法：element.click()  // 第一种简写形式
+
+  ​            element.trigger("type")//第二种自动触发模式
+
+```js
+$('p').click();
+
+$("p").trigger("click"); // 此时自动触发点击事件，不需要鼠标点击
+
+$('div').triggerHandler('click');// 自动触发事件【这种触发事件不会触发默认行为】
+```
+
+
+
+##  10-jQuery事件对象
+
+- 事件被触发，就会有事件对象的产生
+
+- 语法：element.on(events,[selector],function(event){})
+
+  ```js
+  阻止默认行为：event.preventDefault()   或者 return  false 
+  
+  阻止冒泡： event.stopPropagation()
+  ```
+
+  
+
+## 11-jQuery其它方法
+
+### 11-01-插件
+
+- 常用网站
+  -  jQuery 插件库  http://www.jq22.com/   
+  -   jQuery 之家   http://www.htmleaf.com/  
+
+### 11-02-图片懒加载
+
+- BOOTSTRAP插件
+
+  - https://www.bootcss.com/
+  - - 引入CSS、引入JQ、引入JS
+    - .container
+    - 复制粘贴。
+
+- 步骤：
+
+  - 要引入JQuery
+  - 插件JS【js引入文件和js调用必须写到 DOM元素（图片）最后面】
+  - 将图片 src 替换为 data-lazy-src
+  - 调用lazyLoadInit(）
+
+  ​								
+
+## 12-todolist案例
+
+```js
+ var str = localStorage.getItem('toDoList');
+      // 判断本地是否有地方存储数据
+      if (str == null) {
+        // 向浏览器本地申请一个地方
+        localStorage.setItem('toDoList', '[{"name":"吃饭","isOk":true},{"name":"睡觉","isOk":false}]');
+        // 重新读取本地数据
+        str = localStorage.getItem('toDoList');
+      }
+      // 把字符串数组 转换为 数组
+      var arr = JSON.parse(str);
+     // console.log(arr);[{"name":"吃饭","isOk":true},{"name":"睡觉","isOk":false}]
+      // 循环遍历
+      for (var i = 0; i < arr.length; i++) {
+        // 取出一个对象
+        var obj = arr[i]; // {name: "吃饭", isOk: true}
+        // 判断
+        if (obj.isOk == true) {
+          // 完成
+          $('<li></li>').attr('num',i).html('<span>' + obj.name + '</span>').appendTo('ul');
+        } else {
+          // 没完成
+          $('<li></li>').attr('num',i).html('<input type="checkbox"><span>' + obj.name + '</span>').appendTo('ol');
+        }
+      }
+
+
+
+
+      // 1、点击添加，创建li添加到ol
+      // li里面有checkbox，有span，span里面放的就是输入的内容
+      $('.add').click(function () {
+        // 回去val值
+        var zhi = $('.txt').val();
+        // 创建li
+        var li = $('<li></li>');
+        // 设置        li.attr('num',arr.length);内容
+        li.html('<input type="checkbox"><span>' + zhi + '</span>');
+        // 放到ol里面
+        $('ol').append(li);
+        // 清空value
+        $('.txt').val('');
+
+
+        // 添加数据，保存
+        
+        // [
+        //   {"name":"吃饭","isOk":true},
+        //   {"name":"睡觉","isOk":false},
+        //   {"name":zhi,"isOk":false} 
+        // ]
+        // 往数组里面添加内容
+        arr.push( {"name":zhi,"isOk":false} );
+        // console.log( arr );
+        // 转成字符串
+        str = JSON.stringify(arr);
+        // 添加
+        localStorage.setItem('toDoList',str);
+
+      })
+
+      // 2、点击checkbox，把这个li添加到下面ul
+      $('ol').on('click','input',function () {
+
+        // 获取li
+        var li = $(this).parent();
+        // 放到ul
+        $('ul').append(li);
+        // 把input
+        $(this).hide();
+
+
+        // 修改isOk改为true
+        // 点击input，修改数组里面对象的isOk，改为true
+        // arr = [
+        //   {"name":"吃饭","isOk":true},==><li num=0>吃饭</li>
+        //   {"name":"睡觉","isOk":false},==><li num=1>睡觉</li>
+        //   {"name":"睡觉","isOk":false},==><li num=2>睡觉</li>
+        //   {"name":zhi,"isOk":false},
+        //   {"name":zhi,"isOk":false},
+        //   {"name":zhi,"isOk":false} 
+        // ]
+        // arr[i].isOk = true;
+        // 我们需要知道当前操作的这个li的索引值(num)，就知道了数组里面第几项需要改isOk
+        // 获取当前点击li的num
+        var i = li.attr('num');
+        // 修改isOk
+        arr[i].isOk = true;
+        // 转换
+        str = JSON.stringify(arr);
+        // 保存
+        localStorage.setItem('toDoList',str);
+
+      });
+```
+
+
+
