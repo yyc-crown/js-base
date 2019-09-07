@@ -1,4 +1,4 @@
-# CSS
+*CSS
 
 ### 00-字体 **渐变色**的设置
 
@@ -22,6 +22,8 @@
 
 ```css
 input {
+    //设置只读属性
+    readonly=readonly
 
   //先清除输入框的默认样式
   border: 0;
@@ -122,6 +124,9 @@ input {
 > 
 >
  ### 01-js-数据-检查类型
+
+- **typeof 数据**
+
 >
 > - 语法：
 >
@@ -154,7 +159,11 @@ input {
 >   // console.log(e, typeof e);
 > ```
 >
+- instanceof
+  - 语法：arr  instanceof  Array
+
  ### 02-js-转化-转数字
+
 >
 > ```js
 >  // 其他 变 数字
@@ -216,48 +225,51 @@ input {
 > 
 >
  ### 03-js-转化-转字符串
+
+- 两种方法：
+  - String()
+  -  .toString()
+- 特点：肯定也是能转成功，效果就是数据两边加单(双)引号；
+
+>```js
+>// String()
+>// 其他：数字类型、布尔类型、null（值）、undefined（值undefined）
 >
-> - 特点：肯定也是能转成功，效果就是数据两边加单(双)引号；
+>// 1.数字
+>// var a = 123;
+>// console.log(a, String(a));
 >
-> ```js
->   // String()
->   // 其他：数字类型、布尔类型、null（值）、undefined（值undefined）
-> 
->   // 1.数字
->   // var a = 123;
->   // console.log(a, String(a));
-> 
->   // var a = NaN;
->   // console.log(a, String(a));
-> 
-> 
->   // 2.布尔类型 true false
->   // var a = true;
->   // console.log(a, String(a));
-> 
-> 
->   // 3. null undefined
-> 
-> 
->   // --------------------------------------------------------------------
->   // .toString()
->   // 1.数字类型
->   // var a = 123;
->   // console.log(a, a.toString());
-> 
-> 
->   // 2.null undefined不能用这个方法；
->   var a = null;
->   console.log(a, a.toString());
-> ```
+>// var a = NaN;
+>// console.log(a, String(a));
 >
-> 
 >
-> 
+>// 2.布尔类型 true false
+>// var a = true;
+>// console.log(a, String(a));
 >
-> 
 >
-> 
+>// 3. null undefined
+>
+>
+>// --------------------------------------------------------------------
+>// .toString()
+>// 1.数字类型
+>// var a = 123;
+>// console.log(a, a.toString());
+>
+>
+>// 2.null undefined不能用这个方法；
+>var a = null;
+>console.log(a, a.toString());
+>```
+>
+>
+>
+>
+>
+>
+>
+>
 >
  ### 04-js-转化-转Boolean
 >
@@ -1160,6 +1172,22 @@ var obj = {}; // 这也是一个没有属性和方法对象，其本质和构造
 console.log(obj,typeof obj);
 ```
 
+- 自定义构造函数
+
+  ```js
+  //先自定义一个函数
+  function Star(uname,age,height) {
+      //对象.属性
+      this.uname=uname;
+      this.age=age;
+      this.height=height;
+  }
+  //调用
+  var obj=new Star("张铭恩"，24,185)
+  ```
+
+  
+
 #### 03-添加
 
 - 如： 使用对象描述一个叫`狗蛋`的人，先字面量声明一个对象，再给对象上属性和方法赋值；
@@ -1258,6 +1286,7 @@ for(var key in obj){
 | Math.ceil(x)  把一个浮点数进行向上取整                       | console.log(Math.ceil(3.9));  // 4                           |
 | Math.abs(x)  求一个数的绝对值 正数                           | console.log(Math.abs(3));  // 3                              |
 | Math.max(x,y...)  求多个数字中的最大值，同理 Math.min(x,y...); | console.log(Math.max(10,20));//20  console.log(Math.min(10,20));  // 10 |
+| Math.PI                                                      | 圆周率                                                       |
 ### 案例：刷新页面，页面中有盒子可以随机变颜色
 
 ```
@@ -1371,11 +1400,13 @@ console.log(res2);
 
 ### 02-04-遍历数组
 
-#### 三种方法
+#### 四种方法
 
-- 方法一：for循环
+- 方法一：**for循环**
 
-- *方法二：forEach：需要一个回调函数，需要3个形参*
+- *方法二：**forEach**：需要一个回调函数，需要3个形参*
+
+  - 语法：array.forEach(function(currentValue, index, arr))
 
   ```js
   var arr = [1, 2, 4, 6, 5, 7, 9];
@@ -1387,7 +1418,13 @@ console.log(res2);
 
   
 
-- *方法三：filter筛选数组中需要的数组*
+- *方法三：**filter**筛选数组中需要的数组*
+
+  - 语法：array.filter(function(currentValue, index, arr))
+
+  - filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素,主要用于筛选数组
+
+    注意它直接返回一个新数组
 
   ```js
   
@@ -1407,7 +1444,20 @@ console.log(res2);
       console.log(res);
   ```
 
-  
+- **some()--ES5新增的遍历数组方法**
+
+  - 语法：array.some(function(currentValue, index, arr)) 【注意：找到或者满足条件立刻停止】
+
+    ```js
+    var arr=[2,4,67,34]
+    var m = arr.some(function(item, index) {
+                return item >= 5
+            })
+            console.log(m);
+    //找到大于5的数之后就停止了查找，返回true，如果没找到就返回false
+    ```
+
+    
 
 #### 案例：筛选出一个数组中索引为偶数的元素(两种方法)
 
@@ -1561,6 +1611,92 @@ var arr = [1, 3, 5, 2, 4, 9, 6];
 
 - 循环就是无限的循环下去，而遍历则是一个个的到最后一个元素就结束了；
 
+### 02-09-数组的扩展（ES6）
+
+- **扩展运算符**:拼接两个数组
+
+  - 语法:...参数剩余（rest参数）
+
+  - 代码：
+
+    ```js
+    let arr1 = [2, 3];
+            let arr2 = [44, 34];
+            // ES5
+            let arr3 = arr1.concat(arr2);
+            let arr4 = [...arr1, ...arr2];
+            console.log(arr3);
+            console.log(arr4);
+    ```
+
+- **将伪数组转化为数组**
+
+  - 语法：Array.from()
+
+  - 代码：
+
+    ```js
+    let obj = {
+                0: "apple",
+                1: "banana",
+                2: "orange",
+                length: 3
+            }
+            let arr = Array.from(obj);
+            console.log(arr);
+    ```
+
+- **遍历数组forEach**
+
+  ```js
+   [2, 4, 3, 22].forEach(function(index, item) {
+              console.log(item, index);
+  
+          })
+  ```
+
+- **find()和findIndex()遍历过程中，查找符合条件的值（下标）**
+
+  - 用法跟forEach一样
+  - find（）-----------------找值
+  - findIndex()-----------------找下标
+
+- **includes("查找的值"，[开始的位置])**
+
+  - 返回布尔类型
+    - 找到了，返回true，
+    - 没有找到，返回false
+
+  ```js
+  console.log([3, 4, 2, 6, 9, 1, 8].includes(3)); //true
+          console.log([3, 4, 2, 6, 9, 5, 8].includes(1)); //false
+          console.log([3, 4, 2, 6, 0, 91, 8].includes(2, 3)); //false
+  ```
+
+### 02-10-数组去重（ES6）
+
+- ES6 提供了新的数据结构 Set。它类似于数组，但是==成员的值都是唯一的==，没有重复的值。
+
+- **Set**的特点就是该对象里面的成员不会有重复
+
+  ```js
+   // 将一个数组传递给Set，得到一个没有重复值的Set对象
+          let s = new Set([3, 4, 3, 5, 3, 6, 4, 5]);
+          // console.log(s); // 得到的为对象 {3, 4, 5, 6}
+  
+    // console.log(Array.from(s)); // 把伪数组转成数组
+       console.log([...s]); // 不是所有的伪数组都可以使用...；只有Set可以使用
+  
+  ```
+
+- Set成员
+
+  - `size`：属性，获取 `set` 中成员的个数，相当于数组中的 `length`
+  - `add(value)`：添加某个值，返回 Set 结构本身。
+  - `delete(value)`：删除某个值，返回一个布尔值，表示删除是否成功。
+  - `has(value)`：返回一个布尔值，表示该值是否为`Set`的成员。
+  - `clear()`：清除所有成员，没有返回值。
+
 ## 03-String
 
 ### 03-01-查找
@@ -1618,26 +1754,134 @@ var str = `abcdefghkfffdsxv`;
     console.log(str_3);
 ```
 
+### 03-03-替换（replace）
+
+- 缺点：只能替换一个或者同类型的全换
+
+```js
+var str = "get-element-by-id";
+        str = str.split("-");
+        // console.log(str);此时打印的为数组["get", "element", "by", "id"]
+        var arr = str.join("");
+        console.log(arr);
+        // 字符串的替换
+        var newStr = arr.replace(/b/, "B");
+		
+//最后得到的为getelementByid
+```
+
+
+
+- g：全局匹配
+
+  i：忽略大小写
+
+  gi：全局+忽略
+
+  ```js
+  var str = 'abcdeAfgabcdabcd';
+  
+  		var newStr = str.replace(/a/gi,'*');
+  
+  		console.log(newStr);
+  
+  ```
+
+### 03-04-字符串的扩展（ES6新增）
+
+| 语法                               | 作用                                                         |
+| ---------------------------------- | ------------------------------------------------------------ |
+| *includes("查找的字符串"，[位置])* | *查找字符串是否包含某个字符*                                 |
+| *startWith("字符串"，[位置])*      | *查找字符串的开头是否为某个数字*                             |
+| *endWith("字符串"，[length])*      | *查找字符串的结尾是否为某个字符串*，length为从前往后数的位置(从1开始) |
+| *repeat()*                         | *重复一个字符串*，括号中写重复的次数                         |
+| *trim()*                           | *去掉字符串两边的留白*                                       |
+
+
+
 ## 04-Object
 
-### 对象的浅拷贝(复制)
+### 04-01-对象的浅拷贝(复制)-对象中简单数据类型的拷贝
+
+- 遍历属性的两种形式
+  - obj.name
+  - obj["name"]
+- 两种方法
+  - 遍历循环
 
 ```js
  var obj = {
         name: '张三',
         age: 16,
-        sayHi: function() {
-            console.log(1);
-
-        }
+       
     };
     // 先定义一个新的对象,再进行对象的遍历
+//第一种方法：
     var new_obj = {};
     for (var key in obj) {
         new_obj[key] = obj[key];
     }
     console.log(new_obj);
+//第二种方法：（ES6）
+Object.assign(new_obj,obj)
 ```
+
+- ES6新方法：
+  - 语法：Object.assign(target,sources)
+
+### 04-02-对象的深拷贝-对象中简单和复杂数据类型的拷贝
+
+```js
+var obj = {
+            name: '李寻欢',
+            age: 22,
+            message: {
+                sex: '男',
+                score: 3
+            },
+            color: ['red', 'qing', 'purple']
+        };
+        var newObj = {};
+
+
+        // 遍历对象
+        function bianli(newObj, obj) {
+
+            for (key in obj) {
+                // 对象.属性 = 值;
+                // newObj[key] = obj[key];
+                // 判断判断是不是数组，判断是不是对象，判断是不是属性
+                if (obj[key] instanceof Array) { //是数组
+                    // 按照数组拷贝
+                    // obj[key]==>newObj
+                    newObj[key] = [];
+                    // obj[key]==>继续遍历，遍历给newObj[key]
+                    bianli(newObj[key], obj[key]);
+                } else if (obj[key] instanceof Object) { //是对象
+                    // 按照对象
+                    newObj[key] = {};
+                    bianli(newObj[key], obj[key])
+                } else {
+                    newObj[key] = obj[key];
+                }
+
+            }
+
+        }
+
+
+
+        bianli(newObj, obj);
+
+        // 先遍历，再拷贝
+        obj.message.score = 99;
+        console.log(newObj);
+        console.log(obj);
+```
+
+
+
+
 
 ## 05-String-split（案例）
 
@@ -2000,7 +2244,7 @@ div.style.backgroundColor = ’#fff‘;
       // 添加
       id.setAttribute('ff', '你好');
       // 修改
-      id.setAttribute('index', '你好');
+      id.getAttribute('index', '你好');
   
       // 删除属性某个属性
       id.removeAttribute('index');
@@ -2411,8 +2655,10 @@ btn.addEventListener('click',function fn(){
 - 语法：负责管理浏览器地址栏相关的行为和信息的对象；
 
 ```js
-// 转跳你需要的地址；
+// 转跳你需要的地址；设置
     window.location.href = "http://www.baidu.com"
+//获取
+location.href；
 ```
 
 ## 04-BOM-localStorage
@@ -3258,23 +3504,22 @@ $('div').triggerHandler('click');// 自动触发事件【这种触发事件不�
 
 - 常用网站
   -  jQuery 插件库  http://www.jq22.com/   
-  -   jQuery 之家   http://www.htmleaf.com/  
-
-### 11-02-图片懒加载
-
+  -  jQuery 之家   http://www.htmleaf.com/  
 - BOOTSTRAP插件
-
   - https://www.bootcss.com/
   - - 引入CSS、引入JQ、引入JS
     - .container
     - 复制粘贴。
 
-- 步骤：
+### 11-02-图片懒加载
 
-  - 要引入JQuery
-  - 插件JS【js引入文件和js调用必须写到 DOM元素（图片）最后面】
-  - 将图片 src 替换为 data-lazy-src
-  - 调用lazyLoadInit(）
+- 懒加载使用jquery 插件库  EasyLazyload
+
+  - 步骤：
+    - 要引入JQuery
+    - 插件JS【js引入文件和js调用必须写到 DOM元素（图片）最后面】
+    - 将图片 src 替换为 data-lazy-src
+    - 调用lazyLoadInit(）
 
   ​								
 
@@ -3376,5 +3621,2310 @@ $('div').triggerHandler('click');// 自动触发事件【这种触发事件不�
       });
 ```
 
+# ES6-语法糖
 
+## 01-类与对象（ES6-语法糖）
+
+### 01-01-概念
+
+- 类：**泛指**，抽象了对象的公共部分，它泛指某一大类（class）
+- 对象：**特指**，通过类实例化一个具体的对象
+
+### 01-02-创建类
+
+- 语法：
+
+  ```js
+  class 类名 {}
+  //类名的首字母必须大写
+  //代码
+  class Star {};
+  var ldh=new Star();
+  
+  ```
+
+  
+
+### 01-03-类constructor构造函数
+
+- 语法
+
+  ```js
+  class Star {
+      constructor(uname,age) {
+          this.uname=uname;
+          this.age=age;
+      }
+  }
+  var zme=new Star("张铭恩"，26)
+  
+  ```
+
+  
+
+- 注意：
+
+  - 类的方法里面不带function，直接写即可
+  - 类里面有属性和方法，属性方法要想直接放到类里，我们要用constructor构造器
+  - 构造函数作用：接收参数，返回实例化对象，new的时候执行，主要放一些公共属性
+  - this代表当前实例化对象，谁new就代表谁
+
+### 01-04-类添加方法
+
+- 语法
+
+  ```js
+  class Star {
+  
+  	constructor(uname,age) {
+          this.uname=uname;
+          this.age=age;
+      }
+      //方法名
+  	sing () {}
+  	//方法名
+  	tiao () {}
+  
+  }
+  var zme=new Star("张铭恩"，26)
+  //调用方法
+  zme.sing();
+  ```
+
+  
+
+- 注意：
+
+  - 方法之间不能用逗号隔开；
+  - 方法不需要添加function关键字
+
+- **总结：类有对象的公共属性和方法，用class创建，class里面包含constructor和方法，我们把公共属性放到constructor里面，把公共方法直接往后写既可，但是注意不要加逗号**
+
+### 01-05-类的继承
+
+- 语法：子类 继承 父类 **extends  super**
+
+- 代码：
+
+  ```js
+  class Father {
+              constructor(uname, age) {
+                  this.uname = uname;
+                  this.age = age;
+              }
+              say() {
+                  console.log("说话");
+  
+              }
+              money() {
+                  console.log("一个亿");
+  
+              }
+          }
+  		//子类继承父类
+          class Son extends Father {
+  
+              constructor(uname, age, score) {
+                  super(uname, age);
+                  this.score = score;
+              }
+              money() {
+  
+                  // console.log(10);
+                  //super关键字
+                  super.money();
+  
+              }
+          }
+  
+          var obj = new Son("张三", 23, 99);
+          console.log(obj);
+          obj.money();
+  ```
+
+  
+
+### 01-06-三个注意点
+
+- 在ES6中没有变量提升，必须先定义类，再实例化对象
+
+- 类里面的共有属性和方法必须加**this**使用
+
+- this的指代问题
+
+  - 在构造函数中指实例化对象
+
+  - 在普通函数中，即方法中指这个方法的调用者
+
+    ```js
+     class Btn {
+            constructor(id) {
+          this.anniu = document.querySelector(id)
+     // this.anniu.onclick = function() {
+                        //     console.log(123);
+    
+                    // }
+                    this.anniu.onclick = this.sing;
+                    console.log(this);
+                    //在构造函数中指实例化对象
+    
+                }
+    
+                sing() {
+                    // console.log("唱歌");
+                    console.log(this);
+                    //这个方法的调用者
+                    //选择出来的那个input
+    
+                }
+                say() {
+                    console.log("说话");
+    
+                }
+            }
+            var n = new Btn("#btn1");
+    ```
+
+  
+
+## 02-声明变量与常量
+
+### 02-01-let声明变量
+
+- 使用let声明的变量不能再次声明
+
+- 具有块级作用域
+
+  ```js
+  		//let声明 ------------------------		
+  		for (let i = 0; i <=3; i++) {
+  		}
+          console.log(i);//报错，i没有定义
+          //var 声明----------------------------------
+          for (var i = 0; i <=3; i++) {
+          
+          }
+          console.log(i);//输出i=4
+  
+  ```
+
+  - 典型示例
+
+    - 需求：点哪个按钮打印相应的索引值
+
+    ```js
+     let btn = document.querySelectorAll("input")
+            for (let i = 0; i < btn.length; i++) {
+                btn[i].onclick = function() {
+                    console.log(i);
+                }
+            }
+            
+            
+            // for (var i = 0; i < btn.length; i++) {
+            //     btn[i].index = i;
+            //     btn[i].onclick = function() {
+            //         console.log(this.index);
+            //     }
+            // }
+    ```
+
+- 没有变量提升，必须先定义才能使用
+
+-  let声明的变量不会挂载在window对象中，是独立的
+
+### 02-02-const声明常量
+
+- **作用：定义一个常量**
+
+- **特点：不能修改；其它特点同let**
+
+- **应用：保存不用改变的数据**
+
+  ```js
+   *// var 可以这样用，const不能这样用*
+  
+  ​        var key = "a";
+  
+  ​        key = "b";
+  
+  ​        console.log(key);
+  
+  ​        *// const用法：一旦定义了就不能修改了*
+  
+  ​        const key1 = "a";
+  
+  ​        console.log(key1);
+  ```
+
+  
+
+## 03-变量的解构赋值
+
+- **解构赋值：解析结构并赋值**
+- **理解：从数组或者对象中提取数据，并赋值给变量（多个）**
+
+  ###      03-01-数组的解构赋值
+
+- 基本的解构:let 模式 = 数组;
+
+  ```js
+  // let [a, b, c] = ['7zA', '你好', 'haha'];
+          // console.log(a);
+          // console.log(b);
+          // console.log(c);
+  
+  ```
+
+- 变量多，值少
+
+  ```js
+   let [a, b, c] = ['7zA', '你好'];
+          // console.log(a, b, c); // 7zA 你好 undefined
+  ```
+
+- 变量少，值多
+
+  ```js
+   // let [a, b] = ['7zA', '你好', 'haha'];
+        console.log(a, b); //打印结果： 7zA 你好
+  ```
+
+- 按需取值
+
+  - **如果只想拿数组中的某个数，只需前面用逗号隔开就好**
+
+  - **[]里面的参数默认从数组的索引开始**
+
+    ​     
+
+  ```js
+  // let [a, , b] = ['7zA', '你好', 'hah'];
+          // console.log(a, b); // 7zA hah
+  ```
+
+- 剩余值
+
+  ```js
+  // let [a, b, ...c] = ['7zA', '你好', '靳晓豪', '霸道车间主任爱上你'];
+          // console.log(a, b); // 7zA 你好
+          // console.log(c); // ["靳晓豪", "霸道车间主任爱上你"]
+  ```
+
+- 复杂的情况
+
+  ```js
+   let [, , [a, b]] = ['aa', 'bb', ['cc', 'dd'], 'ee'];
+          console.log(a, b); // cc dd 
+  ```
+
+  
+
+### 03-02-对象的解构赋值
+
+-  基本的解构
+
+  ```js
+    // let {属性名, 属性名, ...} = 对象;
+          // let {id, name, nickname} = {id: 1, name: '宋江', nickname: '及时雨'};
+          // let {nickname, id, name} = {id: 1, name: '宋江', nickname: '及时雨'};
+          // console.log(nickname, id, name); // 及时雨 1 宋江
+  ```
+
+  
+
+- 按需取值
+
+  ```js
+   // let {id, nickname} = {id: 1, name: '宋江', nickname: '及时雨'};
+          // console.log(id, nickname); // 1 "及时雨"
+  ```
+
+  
+
+- 剩余值
+
+  ```js
+  // let {id, nickname, ...c} = {id: 1, name: '宋江', nickname: '及时雨', height: 155, wieght: 65};
+          // console.log(c); // {name: "宋江", height: 155, wieght: 65}
+  ```
+
+  
+
+- 有冲突，可以为变量定义其他名字
+
+  ```js
+   // let {id:别名, name} = {id: 1, name: '宋江', nickname: '及时雨'};
+          // let {id:heroId, name} = {id: 1, name: '宋江', nickname: '及时雨'};
+          // console.log(heroId);
+  ```
+
+  
+
+-  复杂的情况
+
+  ```js
+  let {code, data} = {
+              code: 200, 
+              msg: '成功', 
+              data: [
+                  {id:1, title: 'aaa'}, 
+                  {id:2, title: 'aaa'}, 
+                  {id:3, title: 'aaa'}
+              ]
+          };
+          console.log(code);
+          console.log(data);
+  ```
+
+  
+
+## 04-箭头函数
+
+### 04-01-声明函数
+
+```js
+let fn = (x, y) => {
+            console.log(x + y);
+        };
+        fn(4, 9);
+```
+
+### 04-02-特点
+
+- 如果箭头函数，参数只有一个，则小括号可以省略
+
+  ```js
+   // let fn = (x) => {
+          //     return x * x;
+          // }
+  
+    // 省略小括号的写法
+          // let fn = x => {
+          //     return x * x;
+          // }
+          // console.log(fn(9));
+  ```
+
+  
+
+- 如果函数体只有一行代码，则大括号可以省略；并且默认表示返回函数体的值
+
+  ```js
+   let fn = x => x * x;
+          console.log(fn(7));
+  ```
+
+- 箭头函数内部，没有arguments对象
+
+  ```js
+  // function abc () {
+          //     console.log(arguments); // arguments对象可以获取到所有的实参
+          // }
+          // abc(3, 8, 9);
+  
+  
+  // 箭头函数
+          // let abc = () => {
+          //     console.log(arguments); // 报错，找不到arguments对象
+          // }
+          // abc(3, 4, 6);
+  
+  
+    // 使用剩余参数，可以获取到函数的所有实参
+          // let abc = (x, y, ...z) => {
+          //     console.log(x, y); // 7, 8
+          //     console.log(z); // [9, 4, 15, 21]
+          // }
+          // abc(7, 8, 9, 4, 15, 21);
+  
+     // let abc = (...z) => {
+          //     console.log(z); // [7, 8, 9, 4, 15, 21]
+          // }
+          // abc(7, 8, 9, 4, 15, 21);
+  ```
+
+- 箭头函数不能当做构造函数
+
+  ```js
+   // let abc = () => {
+  
+          // }
+          // let a = new abc(); // 报错，箭头函数不是一个构造函数；abc is not a constructor
+  ```
+
+  
+
+- 箭头函数函数内部没有自己的this，箭头函数内部的this指向外部作用域的this;**箭头函数的this不是调用的时候决定的，而是在定义的时候处在的对象就是它的this**
+
+  ```js
+  var age = 20;
+  
+          let obj = {
+              age: 30,
+              fn1: function () {
+                  console.log(this); // obj 对象
+                  console.log(this.age); // 30
+              },
+              fn2: () => {
+                  console.log(this); // window对象
+                  console.log(this.age); // 20
+              }
+          };
+  
+          obj.fn1();
+          obj.fn2();
+  ```
+
+- **简化的对象写法：**     
+
+  - 省略同名的属性值
+  - 省略方法的function*
+
+  ```js
+  let name = "marry";
+          let age = 34;
+          // let obj = {
+          //     name: name,
+          //     age: age,
+          //     getName: function() {
+          //         console.log(name);
+  
+          //     }
+          // }
+          let obj = {
+              name, //省略同名的属性值
+              age,
+              getName() {
+                  console.log(name);
+              }
+          }
+          console.log(obj);
+          console.log(obj.getName());
+  ```
+
+  
+
+##    05-其它
+
+-  Number的扩展
+  - ES6 将全局方法`parseInt()`和`parseFloat()`，移植到`Number`对象上面，功能完全保持不变。
+    - Number.parseInt()
+    - Number.parseFloat()
+
+# JavaScript高级
+
+## 01-编程思想
+
+| 思想     | 含义                                                         |
+| -------- | ------------------------------------------------------------ |
+| 面向过程 | 面向过程就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候再一个一个的依次调用就可以了。 |
+| 面向对象 | 面向对象是把事务分解成为一个个对象，然后由对象之间分工与合作。 |
+
+- 面向对象的三大特性：
+  - 封装性
+  - 继承性
+  - 多态性
+- 面向过程与面向对象**优缺点**
+  - 面向过程性能高，但不好维护
+  - 面向对象性能不高，但易于维护且拓展性高
+
+## 02-类与对象（ES6-语法糖）
+
+### 02-01-概念
+
+- 类：**泛指**，抽象了对象的公共部分，它泛指某一大类（class）
+- 对象：**特指**，通过类实例化一个具体的对象
+
+### 02-02-创建类
+
+- 语法：
+
+  ```js
+  class 类名 {}
+  //类名的首字母必须大写
+  //代码
+  class Star {};
+  var ldh=new Star();
+  
+  ```
+
+  
+
+### 02-03-类constructor构造函数
+
+- 语法
+
+  ```js
+  class Star {
+      constructor(uname,age) {
+          this.uname=uname;
+          this.age=age;
+      }
+  }
+  var zme=new Star("张铭恩"，26)
+  
+  ```
+
+  
+
+- 注意：
+  - 类的方法里面不带function，直接写即可
+  - 类里面有属性和方法，属性方法要想直接放到类里，我们要用constructor构造器
+  - 构造函数作用：接收参数，返回实例化对象，new的时候执行，主要放一些公共属性
+  - this代表当前实例化对象，谁new就代表谁
+
+### 02-04-类添加方法
+
+- 语法
+
+  ```js
+  class Star {
+  
+  	constructor(uname,age) {
+          this.uname=uname;
+          this.age=age;
+      }
+      //方法名
+  	sing () {}
+  	//方法名
+  	tiao () {}
+  
+  }
+  var zme=new Star("张铭恩"，26)
+  //调用方法
+  zme.sing();
+  ```
+
+  
+
+- 注意：
+  - 方法之间不能用逗号隔开；
+  - 方法不需要添加function关键字
+- **总结：类有对象的公共属性和方法，用class创建，class里面包含constructor和方法，我们把公共属性放到constructor里面，把公共方法直接往后写既可，但是注意不要加逗号**
+
+### 02-05-类的继承
+
+- 语法：子类 继承 父类 **extends  super**
+
+- 代码：
+
+  ```js
+  class Father {
+              constructor(uname, age) {
+                  this.uname = uname;
+                  this.age = age;
+              }
+              say() {
+                  console.log("说话");
+  
+              }
+              money() {
+                  console.log("一个亿");
+  
+              }
+          }
+  		//子类继承父类
+          class Son extends Father {
+  
+              constructor(uname, age, score) {
+                  super(uname, age);
+                  this.score = score;
+              }
+              money() {
+  
+                  // console.log(10);
+                  //super关键字
+                  super.money();
+  
+              }
+          }
+  
+          var obj = new Son("张三", 23, 99);
+          console.log(obj);
+          obj.money();
+  ```
+
+  
+
+### 02-06-三个注意点
+
+- 在ES6中没有变量提升，必须先定义类，再实例化对象
+
+- 类里面的共有属性和方法必须加**this**使用
+
+- this的指代问题
+
+  - 在构造函数中指实例化对象
+
+  - 在普通函数中，即方法中指这个方法的调用者
+
+    ```js
+     class Btn {
+            constructor(id) {
+          this.anniu = document.querySelector(id)
+     // this.anniu.onclick = function() {
+                        //     console.log(123);
+    
+                    // }
+                    this.anniu.onclick = this.sing;
+                    console.log(this);
+                    //在构造函数中指实例化对象
+    
+                }
+    
+                sing() {
+                    // console.log("唱歌");
+                    console.log(this);
+                    //这个方法的调用者
+                    //选择出来的那个input
+    
+                }
+                say() {
+                    console.log("说话");
+    
+                }
+            }
+            var n = new Btn("#btn1");
+    ```
+
+    
+
+## 03-ES5-语法盐
+
+### 01-自定义构造函数
+
+```js
+//先自定义一个函数
+function Star(uname,age,height) {
+    //对象.属性
+    this.uname=uname;
+    this.age=age;
+    this.height=height;
+}
+//调用
+var obj=new Star("张铭恩"，24,185)
+```
+
+- 注意：
+  - 函数名首字母必须大写
+  - 要想判断函数和自定义构造函数，需要看是否与new一起使用，一起使用的是自定义构造函数，反之为函数
+- new 在执行时会做的4件事
+  - 在内存中先创建一个新的空对象
+  - 让this指向这个新的对象
+  - 执行代码,添加属性
+  - 返回这个新对象（所以构造函数里面不需要return）
+
+### 02-静态成员与实例成员
+
+- 静态成员：在构造函数本上添加的成员称为静态成员，只能由构造函数本身来访问
+- 实例成员：在构造函数内部创建的对象成员称为实例成员，只能由实例化的对象来访问
+
+### 03-构造函数
+
+#### 03-01-原型对象prototype
+
+- 构造函数的问题：浪费内存，所以就有了原型对象的出现
+
+- 每一个构造函数都有prototype属性，作用是节省了内存空间
+
+- **总结：所有的公共属性写到构造函数里面，所有的公共方法写到原型对象里面**
+
+  ```js
+  function Star (uname, age) {
+  
+  		this.uname = uname;
+  		this.age = age;
+  		// this.sing = function () {
+  		// 	console.log(this.name + '在唱歌');
+  		// }
+  
+  	}
+  	Star.prototype.sing = function () {
+  		console.log(this.uname + '在唱歌');
+  	}
+  
+  	var zxc = new Star('周星驰', 22);
+  	var ldh = new Star('刘德华', 22);
+  	// console.log( Star.prototype );
+  	ldh.sing();
+  	zxc.sing();
+  ```
+
+  
+
+#### 03-02-对象原型
+
+- 主要作用：指向prototype
+- **注意**：____proto____是一个非标准属性，不可以拿来赋值或者设置【只读属性】
+- ____proto____对象原型和原型对象prototype 是等价的
+- ____proto____对象原型的意义就在于为对象的查找机制提供一个方向，或者说一条路线，但是它是一个非标准属性，因此实际开发中，不可以使用这个属性，它只是内部指向原型对象prototype
+
+- **总结**：每一个构造函数都有一个原型对象，每一个实例化对象都有一个对象原型
+- **统一称呼：proto原型，prototype成为原型对象**
+- 
+
+![关系图](E:\黑马程序\就业班\资料\js高级\第二天高级\day2\笔记1\关系图.jpg)
+
+#### 03-03-构造函数、实例、原型对象
+
+- 图解
+
+  
+
+![构造函数，原型对象，对象实例关系](E:\黑马程序\就业班\资料\js高级\第二天高级\day2\笔记1\构造函数，原型对象，对象实例关系.jpg)
+
+#### 03-04-constructor构造函数
+
+- 作用：记录是哪个构造函数创建出来的，指回构造函数
+
+- 用法：
+
+  ```js
+  function Star(name) {
+              this.name = name;
+          }
+          // 每一个构造函数都有原型对象,添加方法可以用.方法
+          // Star.prototype.sing=function() {
+          //     console.log("abc");
+          // }
+          // Star.prototype.dance=function() {
+          //     console.log("def");
+          // }
+          //上面的方法如果太多的话会很麻烦，所以下面的方法
+          Star.prototype = {
+              // 但是必须强制指回构造函数
+              constructor: Star,
+              sing: function() {
+                  console.log("abc");
+  
+              },
+              dance: function() {
+                  console.log("得分");
+  
+              },
+          }
+  ```
+
+  
+
+### 04-原型链
+
+- ![原型链](E:\黑马程序\就业班\资料\js高级\第二天高级\day2\笔记1\原型链.jpg)
+
+- 提供一个成员查找机制
+
+### 05-扩展内置对象
+
+- 为什么扩展？
+
+  - 有一些常用但内置中没有的方法，我们可以自定义一些方法，需要时直接调用即可
+
+- 代码
+
+  ```js
+  // console.log(Array.prototype);
+          var arr = [1, 2, 3];
+  	//扩展一个求和的内置对象
+  	//以数组为例，对象同理
+          // 求和
+          Array.prototype.sum = function() {
+              var sum = 0;
+              // 遍历数组
+              for (var i = 0; i < this.length; i++) {
+                  sum += this[i]
+  
+              }
+              return sum;
+          }
+  
+          var n = arr.sum();
+          console.log(n);
+  ```
+
+  
+
+### 06-继承
+
+#### 06-01-继承属性
+
+- 语法：父类.call(this,参数1，参数2)
+
+- 代码
+
+  ```js
+  		function Father(name, age) {
+              this.name = name;
+              this.age = age;
+          }
+  
+          function Son(name, age) {
+              //继承语法：
+              Father.call(this, name, age);
+          }
+  
+          var n = new Son("张铭恩", 22);
+          console.log(n);
+  ```
+
+  
+
+#### 06-02-继承方法
+
+- 语法：将父类新new一个实例化对象，之后将new的实例化对象赋值给子类的prototype,之后必须给子类强制指回构造函数
+
+  - **Son.prototype.constructor = Son;**
+
+- 代码
+
+  ```js
+  function Father(name, age) {
+              this.name = name;
+              this.age = age;
+          }
+          Father.prototype.sing = function() {
+              console.log("123");
+  
+          }
+          var f = new Father();
+  
+          // +++++++++++++++++++++++++++++++++++++++===
+          function Son(name, age) {
+  
+          }
+          // 父构造的方法
+          Son.prototype = new Father;
+          // 必须强制指回构造函数
+          Son.prototype.constructor = Son;
+          // 自己的方法
+          Son.prototype.dance = function() {
+              console.log(223);
+  
+          }
+          var s = new Son("张三", 22);
+          console.log(s);
+  
+          console.log(s.sing);
+  ```
+
+  
+
+### 07-类的本质
+
+- class其实就是function
+
+### 08-函数
+
+#### 08-01-函数的定义方式（3种）
+
+- 命名函数
+
+  ```js
+  function fn() {
+      console.log(123)
+  };
+  fn();
+  ```
+
+  
+
+- 匿名函数
+
+  ```js
+   var f2 = function() {
+              console.log(12);
+          }
+          f2();
+          //  自调用函数：匿名函数的一种()()
+          (function() {
+              console.log(1222);
+  
+          })();
+          (function(a) {
+              console.log(a);
+  
+          })(1);
+  ```
+
+  
+
+- 构造函数(了解)
+
+  ```js
+  var f1 = new Function("a", "b", 'console.log(a+ b)');
+          f1(123, 34)
+  ```
+
+  
+
+#### 08-02-改变函数内部 this 指向（3种方法）
+
+- call()
+
+  ```js
+   var obj = {
+              name: "张三",
+          };
+  
+          function fn(a, b) {
+              console.log(this);
+              console.log(a);
+              console.log(b);
+  
+  
+          }
+          // fn();
+          // // call传多个参数时，参数之间用逗号隔开
+          fn.call(obj, 1, 2);
+  ```
+
+  
+
+- apply()
+
+  ```js
+   var obj = {
+              name: "张三",
+          };
+  
+          function fn(a, b) {
+              console.log(this);
+              console.log(a);
+              console.log(b);
+  
+  
+          }
+          // fn();
+          //  apply传多个参数时，必须是数组形式
+          fn.apply(obj, [1, 2]);
+  ```
+
+  
+
+- bind()
+
+  ```js
+  var obj = {
+              name: 张三
+          };
+  
+          function fn(a, b) {
+              console.log(this);
+              console.log(a);
+              console.log(b);
+  
+  
+          }
+          //  bind会改变函数内this的指向，但它不会执行，返回的是一个新的函数
+          var n = fn.bind(obj, 1, 2);
+          n();
+  
+  
+          // 案例-----------------------------------------
+          var btn = document.querySelector("input");
+  
+          // 注册事件
+          btn.onclick = function() {
+              this.disabled = true;
+              window.setTimeout(function() {
+                  this.disabled = false;
+              }.bind(this), 2000);
+          }
+  ```
+
+  
+
+- **总结**
+
+  | 改变this指向 | 应用场景                                                     |
+  | ------------ | ------------------------------------------------------------ |
+  | call()       | 多用于继承，调用函数，参数传递时，多个参数之间用逗号隔开     |
+  | apply()      | 多用于数组的操作，调用函数，传参时，必须是数组格式的         |
+  | bind()       | 不调用函数,但是还想改变this指向. 比如改变定时器内部的this指向多用于 |
+
+  
+
+#### 08-03-this指向问题
+
+| 调用方式     | this指向       |
+| ------------ | -------------- |
+| 普通函数     | window         |
+| 构造函数调用 | 实例对象，     |
+| 对象方法调用 | 该方法所属对象 |
+| 事件绑定调用 | 绑定事件对象   |
+| 定时器函数   | window         |
+| 立即执行函数 | window         |
+
+
+
+### 09-严格模式与普通模式
+
+- 严格模式：“use strict”
+  - 为脚本开启:在script标签中写“use strict”；
+  - 为函数开启：在函数内部写“use strict”；
+- 严格模式下的变化
+  - 变量规定：变量必须声明，并且不能删除变量
+  - this指向问题：严格模式下，普通函数this是undefined
+
+### 10-高阶函数
+
+- 把函数当做参数传递
+- 把函数当做返回值返回
+
+### 11-闭包
+
+- 指有权访问另一个函数作用域中变量的函数
+
+  ```js
+   var lis = document.querySelectorAll("li");
+          // 循环遍历，一个一个注册事件
+          // for (var i = 0; i < lis.length; i++) {
+          //     lis[i].index = i;
+          //     lis[i].onclick = function() {
+          //         console.log(this.index);
+  
+          //     }
+  
+          // }
+  
+          // 闭包现象做法
+          for (var i = 0; i < lis.length; i++) {
+              // lis[i].index = i;
+              (function(index) {
+                  lis[index].onclick = function() {
+                      console.log(index);
+  
+                  }
+              })(i);
+  
+          }
+  ```
+
+  
+
+- **如何在函数外面访问到函数内部的变量**
+
+  ```js
+  function fn () {
+  
+  		var i = 7;
+  		return function () {
+  			console.log(i);
+  		}
+  		// function fn1 () {
+  		// 	console.log(i);
+  		// }
+  		// fn1();
+  	}
+  	var n = fn();
+  n();
+  ```
+
+  
+
+### 12-递归函数
+
+- 含义：自己调用自己
+
+- 案例:
+
+  ```js
+   		// 阶层
+          function fn(n) {
+              // 1-n之间所有数相乘
+              if (n == 1) {
+                  return 1;
+              }
+              return n * fn(n - 1);
+  
+          }
+          console.log(fn(100));
+  
+          // 兔子序列
+          function fn1(n) {
+              if (n == 1 || n == 2) {
+                  return 1;
+              }
+              return fn1(n - 1) + fn1(n - 2);
+          }
+          console.log(fn1(5));
+  ```
+
+  
+
+- 注意：**递归函数的作用和循环效果一样，由于递归很容易发生“栈溢出”错误（stack overflow），所以必须要加退出条件return**。
+
+### 13-正则表达式
+
+- 正则表达式（ Regular Expression ）是用于匹配字符串中字符组合的模式。在JavaScript中，正则表达式也是对象。
+  - 作用：检索关键字，过滤敏感字符，表单验证
+  - 组成：由简单字符和特殊字符组成
+
+#### 13-01-正则表达式在js中的使用
+
+- 创建
+
+  ```js
+  在 JavaScript 中，可以通过两种方式创建一个正则表达式。
+  
+  方式一：通过调用RegExp对象的构造函数创建 
+  
+      var regexp = new RegExp(/123/);
+      console.log(regexp);
+  
+  方式二：利用字面量创建 正则表达式
+  
+       var rg = /abc/; 含义：只要包含abc就可以
+       
+  
+  ```
+
+  
+
+#### 13-02-测试正则表达式
+
+```js
+test() 正则对象方法，用于检测字符串是否符合该规则，该对象会返回 true 或 false，其参数是测试字符串
+
+注意正则里面没有引号
+regexObj.test(str);
+regexObj：正则表达式
+str：用户输入字符串
+
+var rg = /123/;
+console.log(rg.test(123));//匹配字符中是否出现123  出现结果为true
+console.log(rg.test('abc'));//匹配字符中是否出现123 未出现结果为false
+```
+
+#### 13-03-特殊字符
+
+- 边界符：
+
+```js
+正则表达式中的边界符（位置符）用来提示字符所处的位置，主要有两个字符
+
+^ : 表示匹配行首的文本（以谁开始）【/^abc/：以abc为开头】
+
+$：表示匹配行尾的文本（以谁结束）【/^abc$/：只能是abc】
+```
+
+- 字符类
+
+  - []方括号：选择其中的一个，多选一
+
+  - 量词符：用来设定某个模式出现的次数
+
+    | 量词  | 说明                                   |
+    | ----- | -------------------------------------- |
+    | *     | 重复0次或更多次【>=0】/^[a-z]*$/       |
+    | +     | 重复一次或者更多次【>=1】/^[a-z]+$/    |
+    | ？    | 重复0次或1次                           |
+    | {n}   | 重复n次                                |
+    | {n，} | 重复n次或更多次                        |
+    | {n,m} | 重复n到m次 **注：{n,m}中n和m不准有空格 |
+
+    
+
+#### 13-04-预定义类
+
+- 某些常见模式的简写
+
+  | 预定类 | 说明                                     |
+  | ------ | ---------------------------------------- |
+  | \d     | 匹配0-9之间的任意数字，相当于[0-9]       |
+  | \D     | 匹配0-9之外的任意字符，相当于[^0-9]      |
+  | \w     | 匹配任意的字母、数字、下划线             |
+  | \W     | 匹配除字母、数字、下划线之外的任意字符   |
+  | \s     | 匹配空格（包含换行符、制表符、空格符等） |
+  | \S     | 匹配非空格的字符                         |
+
+  
+
+### 14-replace替换（字符串的方法）
+
+- /表达式/[修饰符]
+
+  g：全局匹配
+
+  i：忽略大小写
+
+  gi：全局+忽略
+
+- 屏蔽敏感字
+
+# Ajax
+
+## 01-简单介绍
+
+- 响应状态码
+  - 200：表示OK
+  - 404：表示请求失败
+- 自己计算机的地址
+  - localhost
+  - 127.0.01
+- 浏览器工具查看请求响应
+  - 在public文件夹中，创建一个01-ajax.html。这个文件在服务器上，不在客户端。
+  - 要想访问这个文件，不能右键-->在浏览器中打开。一定要通过 IP 或 域名的方式向服务器发请求，请求这个html文件。
+  - 服务器中，如果有这个文件，则会将html的源代码响应给浏览器
+  - 浏览器解析html源代码，从而呈现出页面
+
+## 02-Request Method请求方式（两种）
+
+- GET （获得）
+  - 地址栏输入网址，按回车
+  - a标签的超链接跳转
+  - 表单提交（不设置method属性，或设置为GET）
+  - Ajax的GET请求
+- POST （邮递）
+  - 表单提交（一定要设置method为POST）
+  - Ajax的POST请求
+
+## 03-Ajax请求方式
+
+### 03-01-GET方式
+
+- 代码
+
+  ```js
+   // 1. 创建浏览器内置的对象 XMLHttpRequest，简称xhr对象
+   var xhr = new XMLHttpRequest();
+   // 2. 调用xhr对象的open方法，设置请求方式和请求的url
+          //xhr.open('GET','http://localhost:4000/time');
+  xhr.open('GET','/time');
+   // 3. 调用xhr对象的send方法，向服务器发送请求
+   xhr.send();
+  // 4. 当请求响应整个过程结束，然后接收服务器响应的结果（返回的数据）
+  xhr.onload = function () {
+     // 使用xhr的response属性来接收服务器响应的结果
+              console.log(this.response)
+    }
+  ```
+
+- 传参：在open 中写
+
+  - 格式为：xhr.open('GET','/time？id="2"&age=12);
+
+- IE缓存问题：
+
+  - 只有IE浏览器会有缓存问题，所以作为了解内容
+  - 缓存问题指的是：两次或多次 AJAX GET 请求**同一个** URL ，IE浏览器在第二次请求的时候，并不会从新向服务器发请求，而是直接使用上次请求的结果。
+    - 解决方法：让URL不一致，添加一个参数，赋值为随机数或者时间戳
+
+### 03-02-POST方式
+
+- 代码
+
+  ```js
+  var xhr = new XMLHttpRequest()
+  // open 方法的第一个参数的作用就是设置请求的 method
+  xhr.open('POST', '/query-post')
+  // 设置 Content-Type 为 application/x-www-form-urlencoded，这行代码不用死记硬背，去复制即可
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+  // 需要提交到服务端的数据可以通过 send 方法的参数传递
+  // 格式：name=zhangsan&age=18
+  xhr.send('name=zhangsan&age=18')
+  xhr.onload = function () {
+      console.log(this.responseText)
+  }
+  ```
+
+- 传参：在send中写
+
+  - 格式为：xhr.send('name=zhangsan&age=18')；
+
+### 03-03-GET和POST的区别（Ajax请求和非Ajax）
+
+- 字母意思不同，如果请求希望从服务器获取数据，则使用GET方式；如果请求是把数据提交给服务器，则使用POST方式
+- GET请求传递大小有限制，一般限制为2k；POST请求传参大小没有限制
+- GET请求传递的参数在url上，不是很安全；POST请求传递的数据不在url上，稍微安全一些
+- GET请求不能上传文件；POST请求可以上传文件
+
+## 04-响应数据格式（JSON和XML）
+
+### 04-01-JSON
+
+- 两种编程语言交互数据的时候，互相不认识对方的数据，所以要把数据转成各种语言都认识的格式，就是JSON
+- 转化
+  - 转JS数据
+    - var js=JSON.parse(json数据)
+  - 转JSON
+    - var json= JSON.stringify(JS数据);
+
+### 04-02-XML(了解)
+
+- XML语法规范：
+  - 和html写法差不多
+  - 只有一个根标签
+  - 标签区分大小写
+  - 标签必须闭合
+  - 属性值必须加引号
+
+## 05-模板引擎
+
+- 步骤：
+  - 引入template-web.js
+  - 定义模板
+    - 要使用script标签
+    - 要设置id属性
+    - 要设置type属性
+  - 调用template函数
+    - 参数1：模板的id
+    - 参数2：必须是js对象，表示模板中使用的数据
+
+- 模板语法：
+
+  - 条件
+
+    ```js
+    // 模板写法
+    {{if age > 18}}
+    	大于18
+    {{else}}
+    	小于18
+    {{/if}}
+      
+      // template函数写法
+    var html = template('id', {
+        age: 20
+    });
+      
+    ```
+
+    
+
+  - 循环
+
+    ```js
+    {{each arr}}
+    	{{$index}} -- 数组的下标
+    	{{$value}} -- 数组的值
+    {{/each}}
+    
+    // template函数写法
+    var html = template('id', {
+        arr: ['apple', 'banana', 'orange']
+    });
+    ```
+
+    
+
+  - 普通数据
+
+    ```js
+    // 模板写法
+    {{var}}
+    
+    // template函数写法
+    var html = template('id', {
+        var: 'hello world'
+    });
+    ```
+
+    
+
+- 代码
+
+  ```js
+  <script src="./assets/template-web.js"></script>
+  
+      <!-- 1. 定义模板 -->
+      <script id="abc" type="text/html">
+          <h1>{{name}}</h1>
+          <p>我是{{nickname}}，我有一辆{{car}}，我今年{{age}}岁了</p>
+          {{if age >= 18}}
+              <p>欢迎来玩~</p>
+          {{else}}
+              <p>未成年人禁止进入</p>
+          {{/if}}
+          <p>我有好几个女朋友，分别是：</p>
+          <ul>
+              {{each girls}}
+              <li>{{$index}} -- {{$value}}</li>
+              {{/each}}
+          </ul>
+      </script>
+  
+  
+      <script>
+          // 2. 调用template函数
+          var str = template('abc', {
+              name: '狗哥',
+              nickname: '北狗最光阴',
+              car: '宝马',
+              age: 31,
+              girls: ['王婆', '金莲', '西门大官人', '李师师', '赛金花']
+          });
+  
+          console.log(str);
+          document.body.innerHTML = str;
+      </script>
+  ```
+
+  
+
+## 06-同步与异步
+
+- 同步：同一个时间点，只能有一个操作，只能有一行代码在执行，如果代码没有执行完，后续的代码都需要等待。
+- 异步：同一个时间点，可以执行多个操作，当前文档中的js代码正在执行，ajax的代码可以同时执行，二者互不影响
+
+## 07-XHR对象其他API
+
+- **XHR 1 版 API**
+  - open -- 设置请求方式、请求url、同步或异步
+  - send -- 发送请求
+  - readyState -- ajax的状态，值（0，1，2，3，4）
+  - onreadystatechange -- 当readyState的值改变的时候，或当接收的数据发生改变的时候都会触发
+  - responseText：-- 用于接收服务器返回的 `文本类型` 的结果
+- **XHR 2.0 新增API （h5之后新增的API）**
+  - onload -- 当请求响应成功了，会触发
+  - onprogress -- 当响应的数据，正在接收中，会触发。数据量比较大的话，可能会触发多次，可以使用它做一个进度条
+  - onloadstart -- 当请求开始的时候，会触发
+  - onloadend -- 当请求结束的时候，会触发
+  - response ：可以接收任何的响应结果
+  - responseType：配合response使用的一个属性
+
+## 08- jQuery 中封装的 AJAX
+
+- http://www.jquery123.com/category/ajax/
+
+### 08-01-$.ajax
+
+- 基本使用：
+
+```js
+<script src="./assets/jquery.js"></script>
+<script>
+    // $.ajax(JS对象);
+    $.ajax({
+    // 属性: 值
+    type: 'GET', // 请求方式
+    url: '/query-get',
+    // data: 'id=111&age=222&name=zs',
+    data: {id: 333, age: 666, name: 'zs'}, // 发送给接口的数据，可以写成对象，jQuery内部会自动将对象转成字符串
+    dataType: 'json', // 如同 responseType。
+    success: function (res) {
+        console.log(res);
+    }
+});
+</script>
+```
+
+
+
+- 其它
+
+  - 常用选项参数介绍：
+    - cache: 设置ie浏览器的缓存问题， cache: false 不缓存
+    - url：请求地址
+    - type：请求方法，默认为 `get`
+    - dataType：预期服务端响应数据类型
+    - contentType：请求体内容类型，如果是POST请求，默认 `application/x-www-form-urlencoded`
+    - data：（object|string）传递到服务端的数据
+    - timeout：请求超时时间
+    - beforeSend：请求发起之前触发
+    - complete：请求完成触发（不管成功与否）
+    - success：请求成功之后触发（响应状态码 200）
+    - error：请求失败触发
+    - processData：是否让jQuery帮我们将发送给服务器的数据进行处理（默认：true表示将对象处理成字符串）
+  - 代码实现：
+
+  ```js
+  $.ajax({
+    url: '/time',
+    type: 'get',
+    dataType: 'json',
+    data: { id: 1 },
+    beforeSend: function (xhr) {
+      console.log('before send')
+    },
+    success: function (data) {
+      console.log(data)
+    },
+    error: function (xhr) {
+      console.log(xhr)
+    },
+    complete: function (xhr) {
+      console.log('request completed')
+    }
+  })
+  ```
+
+### 08-02-jQuery封装的发送Ajax请求的快捷方法
+
+  - **GET 请求快捷方法**
+
+  `$.get(url, [data], [callback], [dataType])`
+
+  `$.get({settings})`
+
+  - **POST 请求快捷方法**
+
+  `$.post(url, [data], [callback], [dataType])`
+
+  `$.post({settings})`
+
+## 09-全局事件处理
+
+- 每次Ajax请求都需要的事件，比如给一个请求响应过程进度提示，可以使用全局事件处理。反过来说，通过全局事件处理的事件，**后续**的每个ajax请求都会触发。
+
+  - 语法
+
+    ```html
+    `$.ajaxSetup({事件: 处理函数, 事件:处理函数, ...});`
+    ```
+
+  - 示例：
+
+    ```js
+    // 设置全局事件处理
+    $.ajaxSetup({
+        // 设置发送请求前的事件
+        beforeSend: function () {
+            // 这里可以提示，玩命加载中...
+        },
+        // 设置完全接收响应数据后的事件
+        complete: function () {
+            // 这里可以去掉“玩命加载中...”
+        }
+    });
+    
+    ```
+   ```
+  
+   ```
+
+- 进度提示插件---NProgress
+  - https://github.com/rstacruz/nprogress
+  - 步骤：按照所给的步骤进行操作即可
+
+# Node.js
+
+- 浏览器中的js包括
+  - BOM
+  - DOM
+  - 顶级对象window
+  - 浏览器中的对象可以随时调用
+- Node中的js包括：
+  - 全局成员
+  - 模块系统（系统模块、第三方模块、自定义模块）
+  - 顶级对象：global
+  - node中的对象必须先加载再使用
+- 全局变量
+  - __dirname，当前执行文件的绝对路径（在js文件中使用）
+  - __filename,当前执行的绝对路径，包含文件名
+- **require（）**：全局对象global中的一个方法，用于在js文件外的文件
+  - require() 方法可以在js文件中加载另外的js文件（模块）
+  - require() 方法可以在js文件中加载json文件
+
+## 01-node核心模块
+
+### 01-01-path模块：处理路径的模块
+
+- 使用方法
+
+  - 加载模块
+
+    ```js
+    // 使用核心模块之前，首先加载核心模块
+    let path = require('path');
+    // 或者
+    const path = require('path');
+    ```
+
+    
+
+- **path常用的方法**
+
+  | 方法                      | 作用                               |
+  | ------------------------- | ---------------------------------- |
+  | path.basename(path[,ext]) | 返回path的最后一部分（文件名）     |
+  | path.dirname(path)        | 返回目录名                         |
+  | path.==extname==(path)    | 返回路径中文件的扩展名             |
+  | path.format(pathObject)   | 将一个对象格式转化为一个路径字符串 |
+  | path.==join==([...paths]) | 拼接路径                           |
+  | path.resolve([...paths])  | 基于当前工作目录拼接路径           |
+
+  - 代码
+
+    ```js
+    
+    //extname----获取文件后缀名
+    console.log("index.html");//.html
+    
+    
+    //join-----智能拼接路径
+    console.log(path.join("/a","b","c"));//\a\b\c
+    console.log(path.join('a', 'b', 'c')); // a\b\c
+    console.log(path.join('/a', '/b/../c')); // \a\c
+    console.log(path.join('/a', 'b', 'index.html')); // \a\b\index.html
+    console.log(path.join(__dirname, 'a', 'index.html')); // 得到一个绝对路径
+    
+    ```
+
+    
+
+### 01-02-fs模块：文件操作模块
+
+- 使用方法：
+
+  - 先加载模块
+
+    ```js
+    // 引入模块，引入模块的时候，可以使用var、let，但是建议使用const，因为我们不希望它改变
+    const fs = require('fs');
+    ```
+
+    
+
+- **fs常用的方法**
+
+  | API                         | 作用                     |
+  | --------------------------- | ------------------------ |
+  | fs.acess(path,callback)     | 判断路径是否存在         |
+  | fs.appendFile(file,data,ca) | 向文件中追加内容         |
+  | fs.copyFile(src,callback)   | 复制文件                 |
+  | fs.mkdir(path, callback)    | 创建目录                 |
+  | fs.readDir(path,callback)   | 读取目录列表             |
+  | fs.unlink(path,callback)    | 删除文件，只能删除空目录 |
+  | fs.stat(path, callback)     | 获取文件/目录信息        |
+
+  - 代码
+
+    ```js
+    // readFile -- 异步读取文件
+    fs.readFile('./test.json', (err, data) => {
+        if (err) {
+            console.log('读取文件出错');
+        } else {
+            console.log(data); // 读取到的二进制数据
+            console.log(data.toString()); // 得到原始数据
+        }
+    });
+    
+    fs.readFile('./test.json', 'utf-8', (err, data) => {
+        if (err) {
+            console.log('读取文件出错');
+        } else {
+            console.log(data); // 读取到的原始数据
+        }
+    });
+    
+    // writeFile -- 异步写入文件
+    fs.writeFile('./abc.html', 'hello world', (err) => {
+        if (err) {
+            console.log('写入文件失败');
+        } else {
+            console.log('文件写入成功');
+        }
+    });
+    
+    
+    if(err) throw err;//throw代表抛出错误
+    
+    ```
+
+    
+
+### 01-03-querystring模块：处理字符串的模块
+
+- 使用方法
+
+  - 加载模块
+
+    ```js
+    const querystring=require("querystring")
+    ```
+
+    
+
+- **querystring方法**
+
+  ```js
+  //parse --将查询的字符串解析成JS对象
+  console.log(querystring.parse("id=1&name=zs&age=20"));
+  //{ id: '1', name: 'zs', age: '20' }
+  
+  
+  // stringify -- 将JS对象转成查询字符串
+  console.log(querystring.stringify({ id: '1', name: 'zs', age: '20' }));
+  // id=1&name=zs&age=20
+  ```
+
+  
+
+### 01-04-url模块
+
+- 使用方法
+
+  - 加载模块
+
+  ```js
+  const url = require('url');
+  
+  ```
+  - 遗留API使用方法
+
+    ```js
+    let myURL = url.parse('/test.html?id=11&age=22'); // 返回一个包含url各个部分的对象
+    ```
+
+    
+
+  - 新的API使用方法，实例化的时候，必须传递一个**完整的**url
+
+    ```js
+    // 直接提供一个完整的url
+    let myURL = new URL('http://www.xxx.com/test.html?id=11&age=22');
+    // 或
+    // 提供两个参数，一是文件路径及参数部分，二是域名，总之，二者组合必须是完整的url
+    let myURL = new URL('/test.html?id=11&age=22', 'http://www.xxx.com');
+    
+    // 得到的myURL是一个对象，包含url中的各个部分
+    // 如果需要解析**参数部分**，则使用querystring模块，或使用URL的一个子对象searchParams中的get方法
+    let age = myURL.searchParams.get('age')； // 22
+    ```
+
+    
+
+### 01-05-http模块
+
+#### 00-使用http模块搭建的web服务器
+
+- 导入 http 核心模块
+
+- 创建 server 对象(server 对象负责建立连接，接收数据)
+
+- 注册 request 事件，当浏览器发送请求到服务器执行，设置处理请求的函数
+
+- 监听端口（==这个步骤也可以放到注册request事件之前==）
+
+- 代码：
+
+  ```js
+  // 1. 加载http模块
+  const http = require('http');
+  
+  // 2. 创建服务对象，一般命名为server
+  const server = http.createServer(); // create创建、server服务器
+  
+  // 3. 给server对象注册请求（request）事件，监听浏览器的请求。只要有浏览器的请求，就会触发该事件
+  server.on('request', () => {
+      // 只要有浏览器的请求，就会触发该事件
+      console.log('我发现你的请求了，但是不想搭理你');
+  });
+  
+  // 4. 设置端口，开启服务
+  server.listen(3000, () => {
+      console.log('服务器启动了');
+  });
+  ```
+
+  
+
+#### 01-对浏览器的请求做出响应
+
+- 当收到浏览器的请求后，会触发request事件，其实就是触发request事件的处理函数（该函数有两个核心参数 request 和 response）
+
+- 代码：
+
+  ```js
+  // 代码片段
+  server.on('request', function (req, res) {
+    // 该函数就是处理请求响应的函数
+    // 形参res是响应response的简写
+  })
+  ```
+
+  
+
+- **形参**
+
+  - 形参res是response的缩写
+  - 响应对象，服务器给浏览器返回的响应内容，可以通过该对象设置
+  - res.write()  设置响应体（返回给浏览器的内容）的内容，可以多次调用，但是只调用write不会做出响应，发送响应要调用 end() 
+  - res.end()    把响应报文（响应行、响应头、响应体）发送给浏览器
+  - res.setHeader()  设置响应头，比如设置响应体的编码
+  - statusCode 设置状态码
+
+- 响应代码
+
+  ```js
+  // 1. 加载http模块
+  const http = require('http');
+  
+  // 2. 创建server对象
+  const server = http.createServer();
+  
+  // 3. 监听端口，开启服务
+  server.listen(3000, () => console.log('server start'));
+  
+  // 4. 监听浏览器的请求。只要有浏览器的请求，就会触发下面的事件
+  server.on('request', (req, res) => {
+      // req：request，请求；它是一个对象；它包含了所有和请求相关的信息
+      // res：response，响应；它是一个对象；它包含了所有和响应相关的信息
+      /**
+       * res.end('响应的内容'); --- 它可以设置响应体，并做出响应
+       * res.setHeader(); --- 设置响应头
+       * res.write('响应体'); -- 设置响应体，但不会做出响应
+       * res.writeHead() -- 设置响应头，设置响应状态码
+       * res.statusCode = 404;  ---- 设置响应状态码
+       */
+      // res.statusCode = 404;
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.end('hello，我是服务器');
+  });
+  ```
+ #### 02-根据不同 url 地址处理不同请求
+
+- 形参req
+  - 请求对象，浏览器发送的请求报文中的数据已经被解析到该对象上
+  - **request.url**            获取请求行中的路径
+  - **request.method**   获取请求行中的请求方法
+  - request.headers    获取请求头
+
+```js
+const fs = require('fs');
+
+// 1. 加载http模块
+const http = require('http');
+
+// 2. 创建服务对象，一般叫做server
+const server = http.createServer();
+
+// 3. 监听端口，开启服务
+server.listen(3000, () => console.log('我又启动了'));
+
+// 4. 给server注册request事件。当有浏览器的请求，就会触发该事件
+server.on('request', (req, res) => {
+    // 浏览器请求的是什么？
+    /**
+     * req.url ----  获取请求的url
+     * req.method --- 获取请求的方式，值为GET或POST
+     * req.headers -- 所有的请求头
+     */
+    console.log(req.url);
+    // 判断，如果请求的是index.html。则相应index.html
+    /* if (req.url === '/index.html') {
+        // 使用fs.readFile读取index.html。读取的结果就是index.html里面的源代码
+        // 最后将读取的结果响应即可
+        fs.readFile('./manager/index.html', (err, data) => {
+            if (err) throw err;
+            res.end(data);
+        });
+    } else if (req.url === '/lib/bootstrap/css/bootstrap.min.css') {
+        fs.readFile('./manager/lib/bootstrap/css/bootstrap.min.css', (err, data) => {
+            if (err) throw err;
+            res.end(data);
+        });
+    } else if (req.url === '/images/logo.png') {
+        fs.readFile('./manager/lib/bootstrap/css/bootstrap.min.css', (err, data) => {
+            if (err) throw err;
+            res.end(data);
+        });
+    } */
+    
+    fs.readFile('./manager' + decodeURIComponent(req.url), (err, data) => {
+        if (err) throw err;
+        res.end(data);
+    });
+});
+```
+
+## 02-第三方模块
+
+### 02-01-npm
+
+- 作用
+  - 是下载安装第三方模块。
+- 第三方模块
+  - node安装之后，并不存在的模块
+  - 是别人写的模块，目的都是为了简化代码
+- 全局安装
+  - 安装的位置一般都在C盘的某个目录中，可以通过 `npm root -g` 查看
+  - 全局安装的一般都是命令，全局安装的目的是这个命令可以在任何位置使用
+  - 全局安装的模块，不能通过 `require()` 去加载
+- 本地安装
+  - 如果一个模块需要通过 `require()` 加载使用，这个模块必须本地安装
+  - 本地安装的模块，可以在当前目录中，及它的后代目录中都可以使用
+
+### 02-02-JSON和JS格式相互转换
+
+比如要使用一个 数组方法，比如 `push`。必须使用 JS数组去调用这个方法，因为这个方法属于JS数组。
+
+比如要把一个JS数组存放到文件中保存，必须将JS数组转成JSON字符串，因为JSON是字符串，只有字符串才可以存放到文件中。
+
+JSON.parse();
+
+JSON.stringify();
+
+### 02-03-浏览器提交的数据的类型
+
+浏览器提交的数据的类型，有三种：
+
+- 查询字符串格式 ，比如 `name=zs&age20`
+  - 如果没有文件上传，一般都是这种格式
+  - 浏览器，需要设置Content-Type，告诉服务器，我给你提交的数据是什么格式
+- FormData格式，就是一个FormData对象。
+  - 如果有文件上传，则是FormData格式
+  - 浏览器会自动设置Content-Type为 multiple/form-data，不用我们自己去设置
+- json格式 --- 学习vue的时候会用到
+
+> 浏览器提交的不同类型的数据，服务器有不同的接收方式，所以服务器需要知道浏览器提交的数据是什么格式。
+
+### 02-04-服务器接收浏览器的数据
+
+- 接收查询字符串格式的数据(post请求的数据)
+
+  ```js
+  let str = '';
+  req.on('data', (chunk) => {
+      str += chunk;
+  });
+  req.on('end', () => {
+      // 这里处理接收到的数据
+  });
+  ```
+
+  - 也可以使用第三方模块 `body-parser` 来处理这种格式的数据
+
+- 接收FormData格式的数据
+
+  - 需要使用第三方模块 `multer`来处理这种类型的数据
+
+
+
+## 03-MySQL
+
+### 03-01-Navicat中操作MySQL语句（增删改查）
+
+#### 03-01-01-查询数据（大小写都可以）
+
+- **基本查询**
+
+```js
+//--基本的查询语法
+select 字段1，字段2，... from 表名
+
+//--查询所有的字段
+select * from 表名
+
+//--带条件的查询
+select * from 表名 [where 条件] [order by 排序字段]  limit   [开始位置，] 长度
+```
+
+- **模糊查询**
+
+  - 通配符：
+
+    - %：代表任意长度（包括0）的任意字符
+    - _:代表一位长度的任意字符
+
+  - like: 在执行模糊查询时，必须使用like来作为匹配条件
+
+    ```sql
+    - 查询名字中带有 “斯” 字的英雄
+    -- select * from heroes where name like '%斯%'
+    
+    -- 查询名字中带有斯字的英雄，但是要求斯在最后
+    -- select * from heroes where name like '%斯'
+    
+    -- 查询名字中带有斯，但是要求斯是第二个字
+    select * from heroes where name like '_斯%'
+    ```
+
+    
+
+- **查询结果排序**
+
+  - 升序asc(默认值)
+
+  - 降序desc
+
+    ```sql
+    -- select * from heroes order by 排序字段 asc/desc
+    -- asc 默认值，可以省略，表示升序
+    -- desc，表示降序
+    
+    -- 查询所有的英雄，按年龄升序排序
+    -- select * from heroes order by age asc
+    -- select * from heroes order by age
+    
+    -- 查询所有的英雄，按年龄降序排序
+    -- select * from heroes order by age desc
+    
+    -- 查询所有的英雄，先按年龄降序排序；如果年龄相同的，再按id降序排序
+    -- select * from heroes order by age desc, id desc
+    
+    -- 查询年龄大于50岁的英雄，并按年龄降序排序
+    select * from heroes where age>50 order by age desc
+    ```
+
+  - **注意：如果SQL语句中，有where和order by，where一定要放到order by之前**
+
+- **限制查询结果**
+  - limit 用来限制查询结果的起始点和长度
+  - 格式:  limit  start, length
+  - start: 起始点。 查询结果的索引，从0开始。 0代表第一条数据。如果省略start，则默认表示从0
+  - length: 长度
+
+```sql
+-- 查询所有英雄中前5个英雄
+-- select * from heroes limit 起始位置, 长度
+-- select * from heroes limit 0, 5
+-- select * from heroes limit 5
+
+-- 查询所有英雄中，第6到10个英雄
+-- select * from heroes limit 5, 5
+
+-- 查询年龄最大的3个英雄
+-- select * from heroes order by age desc limit 3
+
+-- 查询年龄最大的3个女英雄
+select * from heroes where sex='女' order by age desc limit 3
+```
+
+**==注意：where、order by、limit如果一起使用，是有顺序的，where在最前面、其次是order by、limit要放到最后==。**
+
+#### 03-01-02-添加数据
+
+- 语法：insert  into  表名
+  -  方法一：指定字段和值，只要字段和值对应即可。和顺序无关
+
+    ```sql
+    insert into heroes (字段, 字段, ...) values (值, 值, ...)
+    insert into heroes (nickname, age, name) values ('虚空恐惧', 98, '科加斯')
+    ```
+
+    
+
+  - 方式二：和顺序有关，因为没指定字段，所以值必须是所有的值，而且顺序和表中字段的顺序要一致
+
+    ```sql
+    insert into heroes values (null, '拉克丝', '光辉女郎', null, '动感光波', 28, '女')
+    ```
+
+    
+
+  - **方式三**：使用set里设置新数据的值，没有顺序关系
+
+    ```sql
+    insert into heroes set 字段=值, 字段=值, ....
+    insert into heroes set name='李青', nickname='盲僧', skill='一库'
+    ```
+
+#### 03-01-03-修改数据
+
+- 语法：update  表名  set   字段1=值1，字段2=值2....where  修改条件
+
+  ```sql
+  -- 加条件修改
+  update heroes set age=28, skill='在地上打滚' where id=19
+  -- 如果不指定条件，则会修改所有的行
+  update heroes set sex='妖'
+  ```
+
+#### 03-01-04-删除数据
+
+- 语法：delete   from  表名   where  修改条件
+
+  ```sql
+  -- delete from heroes where id=19
+  -- 不加条件，将删除所有的数据，危险操作
+  -- delete from heroes
+  ```
+
+### 03-02-node中操作MySQL
+
+- 现在执行的文件中下载MySQL包
+
+  - 步骤：
+
+    -  加载 MySQL 模块
+
+    - 创建 MySQL 连接对象
+
+    - 连接 MySQL 服务器
+
+    - 执行SQL语句 
+
+      ```sql
+      // 4.查询（增删改查）
+      // conn.query(sql语句,[sql语句中占位符的值],获取查询结果的回调函数)
+      /*
+          查询结果的回调函数：
+          参数1：err
+          参数2：result---查询的结果
+          参数3：fields---字段（当前查询语句涉及到的字段信息）
+      */
+      ```
+
+      
+
+    - 关闭链接  
+
+- **查询数据**
+
+  ```sql
+  // 加载
+  const mysql = require("mysql");
+  
+  // 创建对象
+  const conn = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password: "",
+      database: "heros",
+      multipleStatements: true,
+  })
+  
+  // 完成连接
+  conn.connect();
+  
+  // 查询
+  // 基本的查询
+  
+  // conn.query(sql语句,[sql语句中占位符的值],获取查询结果的回调函数)
+  // conn.query("select id,name from heroes limit 2", (err, result) => {
+  //         if (err) throw err;
+  //         console.log(result);
+  //     })
+  // 带有一个占位符的查询,得到的是数组，数组中包含着对象
+  // let sql = 'select * from heroes where id<?';
+  // conn.query(sql, 4, (err, result) => {
+  //     if (err) throw err;
+  //     console.log(result);
+  // })
+  
+  // 带有多个占位符的查询
+  // let sql = 'select id,name,sex from heroes where id<? and sex=?'
+  // conn.query(sql, [15, '女'], (err, result) => {
+  //     if (err) throw err;
+  //     console.log(result);
+  
+  // })
+  
+  //一次执行多个SQL语句,每条语句之间用分号隔开,得到为一个大数组，里面包含各条SQL语句执行的到的数组
+  // let sql = `select name from heroes limit 3;
+  // select id,name from heroes where sex='女';
+  // select nickname,name from heroes where id<4`;
+  // conn.query(sql, (err, result) => {
+  //     if (err) throw err;
+  //     console.log(result);
+  
+  // })
+  
+  
+  // 多条语句，多个占位符的查询
+  let sql = `select name from heroes limit ?;
+  select id,name from heroes where sex=?;
+  select nickname,name from heroes where id<?`;
+  conn.query(sql, [3, '女', 5], (err, result) => {
+      if (err) throw err;
+      console.log(result);
+  
+  })
+  
+  // 关闭连接
+  conn.end();
+  ```
+
+  
+
+- **添加**
+
+  ```sql
+  // 加载模块
+  const mysql = require("mysql");
+  // 创建连接对象
+  const conn = mysql.createConnection({
+      host: "localhost",
+      port: 3306,
+      user: "root",
+      password: "",
+      database: "heros"
+  });
+  // 连接到SQL服务器
+  conn.connect();
+  
+  // 添加
+  // 基本的添加
+  // let sql = 'insert into heroes set name="拉克丝",nickname="光辉女郎",age=22'
+  // conn.query(sql, (err, result) => {
+  //         if (err) throw err;
+  //         console.log(result);
+  //     })
+  
+  // 带占位符的添加
+  let sql = 'insert into heroes set ?';
+  let values = {
+          name: "小可爱",
+          nickname: "小仙女",
+          sex: '女',
+          age: 23
+      }
+      // query传递多个占位符的时候，参数必须为数组形式
+  conn.query(sql, values, (err, result) => {
+      if (err) throw err;
+      console.log('添加成功');
+  
+  })
+  
+  // 关闭服务器
+  conn.end();
+  ```
+
+- **更新和删除**
+
+  ```sql
+  // 1.加载模块
+  const mysql = require("mysql");
+  // 2.创建连接对象
+  const conn = mysql.createConnection({
+          host: "localhost",
+          port: 3306,
+          password: "",
+          user: "root",
+          database: "heros"
+      })
+      // 3.连接SQL服务器
+  conn.connect();
+  
+  // 4.更新
+  // 基本更新
+  // let sql = "update heroes set age=40,sex='女' where id=17"
+  // conn.query(sql, (err, result) => {
+  //         if (err) throw err;
+  //         console.log('修改成功');
+  
+  //     })
+  
+  
+  //带有占位符的修改
+  // let sql = "update heroes set ? where id=?"
+  // let values = {
+  //     age: 40,
+  //     sex: '男'
+  // }
+  // conn.query(sql, [values, 12], (err, result) => {
+  //     if (err) throw err;
+  //     console.log(result);
+  
+  // })
+  
+  // 删除
+  let sql = "delete from heroes where id=?"
+  
+  conn.query(sql, 2, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+  
+  })
+  
+  // 5.关闭连接
+  conn.end();
+  ```
+
+  
+
+  
 
