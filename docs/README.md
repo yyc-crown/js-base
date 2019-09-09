@@ -1,4 +1,4 @@
-*CSS
+# CSS
 
 ### 00-字体 **渐变色**的设置
 
@@ -55,18 +55,7 @@ input {
 
 
 
-
-
-> 
->
-> 
->
-> 
->
-> 
->
 # JS-基础-一
->
  ### 00-js-数据-5种简单值类型
 >
 > ```js
@@ -4112,6 +4101,191 @@ let fn = (x, y) => {
     - Number.parseInt()
     - Number.parseFloat()
 
+## 06-ES6的降级处理（解决兼容性问题-babel）
+
+- 降级处理babel的使用步骤
+
+  - 安装node.js
+  - 命令行中安装babel
+  - 配置文件.babelrc
+  - 运行
+
+- 项目初始化（项目文件中不能有中文）
+
+  ```shell
+  npm init -y
+  ```
+
+  
+
+- 在命令行中，安装babel
+
+  ```shell
+  npm install  @babel/core @babel/cli @babel/preset-env
+  ```
+
+- 配置文件.babel（手工创建这个文件)
+
+  - babel 的降级处理配置
+
+    ```shell
+    {
+      "presets": ["@babel/preset-env"]
+    }
+    
+    ```
+
+- 在命令行中，运行
+
+  ```shell
+  # 把转换的结果输出到指定的文件
+  npx babel index.js -o test.js
+  # 把转换的结果输出到指定的目录
+  npx babel 包含有js的原目录 -d 转换后的新目录
+  ```
+
+## 07-ES6新对象-Promise
+
+### 07-01-回调地狱
+
+- JS中或node中，都大量的使用了回调函数进行异步操作，而异步操作什么时候返回结果是不可控的，如果我们希望几个异步请求按照顺序来执行，那么就需要将这些异步操作嵌套起来，嵌套的层数特别多，就叫做回调地狱。
+
+### 07-02-Promise简介
+
+- Promise对象可以解决回调地狱的问题
+- Promise 是异步编程的一种解决方案，比传统的解决方案（回调函数和事件）更合理和更强大
+- ==Promise可以理解为一个容器，里面可以编写异步请求的代码==
+- 从语法上说，Promise 是一个对象
+
+### 07-03-Promise使用及then方法
+
+- **第一步：new 一个对象**(定义一个承诺)
+
+- **第二步：获取对象的结果**(兑现承诺)
+
+- 代码：
+
+  ```js
+  const fs = require('fs');
+  // promise 承诺
+  
+  // 使用Promise分为两大部分
+  
+  // 1. 定义一个承诺
+  let p = new Promise((resolve, reject) => {
+      // resolve -- 解决，完成了; 是一个函数
+      // reject  -- 拒绝，失败了; 是一个函数
+      // 异步操作的代码，它就是一个承诺
+      fs.readFile('./a.txt', 'utf-8', (err, data) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(data.length);
+          }
+      });
+  });
+  
+  // 2. 兑现承诺
+  // p.then(
+  //     (data) => {}, // 函数类似的参数，用于获取承诺成功后的数据
+  //     (err) => {} // 函数类型的参数，用于或承诺失败后的错误信息
+  // );
+  p.then(
+      (data) => {
+          console.log(data);
+      },
+      (err) => {
+          console.log(err);
+      }
+  );
+  ```
+
+### 07-04-then方法的链式调用
+
+- 前一个then里面返回的字符串，会被下一个then方法接收到。但是没有意义；
+
+- 前一个then里面返回的Promise对象，并且调用resolve的时候传递了数据，数据会被下一个then接收到
+
+- 前一个then里面如果没有调用resolve，则后续的then不会接收到任何值
+
+  ```js
+  const fs = require('fs');
+  // promise 承诺
+  
+  new Promise((resolve, reject) => {
+      fs.readFile('./a.txt', 'utf-8', (err, data) => {
+          err ? reject(err) : resolve(data.length);
+      });
+  })
+  .then((a) => {
+      console.log(a);
+      return new Promise((resolve, reject) => {
+          fs.readFile('./a.txt', 'utf-8', (err, data) => {
+              err ? reject(err) : resolve(data.length);
+          });
+      });
+  })
+  .then((b) => {
+      console.log(b);
+      return new Promise((resolve, reject) => {
+          fs.readFile('./a.txt', 'utf-8', (err, data) => {
+              err ? reject(err) : resolve(data.length);
+          });
+      });
+  })
+  .then((c) => {
+      console.log(c)
+  })
+  .catch((err) => {
+      console.log(err);
+  });
+  ```
+
+- **catch方法可以统一获取错误信息**
+
+### 07-05-async 和 await 修饰符
+
+- ES7提供了async和await关键字。await和async关键词能够将异步请求的结果以返回值的方式返回给我们。
+
+- async 修饰的函数，表示该函数里面有异步操
+
+- await和async需要配合使用，没有async修饰的函数中使用await是没有意义的
+
+- await需要定义在async函数内部，await后面跟的一般都是一个异步操作
+
+- await修饰的异步操作，可以使用返回值的方式去接收异步操作的结果
+
+- 如果有哪一个await操作出错了，会中断async函数的执行
+
+- **总结**：**async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果**。
+
+  ```js
+  const fs = require('fs');
+  // 将异步读取文件的代码封装
+  function readFile (path) {
+      return new Promise((resolve, reject) => {
+          fs.readFile(path, 'utf-8', (err, data) => {
+              err ? reject(err) : resolve(data.length);
+          });
+      })
+  }
+  
+  async function init () {
+      let a = await readFile('./a.txt');
+      let b = await readFile('./b.txt');
+      let c = await readFile('./c.txt');
+      console.log(b);
+      console.log(a);
+      console.log(c);
+  }
+  
+  init();
+  ```
+
+  
+
+
+
 # JavaScript高级
 
 ## 01-编程思想
@@ -4170,7 +4344,7 @@ let fn = (x, y) => {
 
 - 注意：
   - 类的方法里面不带function，直接写即可
-  - 类里面有属性和方法，属性方法要想直接放到类里，我们要用constructor构造器
+  - 类里面有属性和方法，属性要想直接放到类里，我们要用constructor构造器
   - 构造函数作用：接收参数，返回实例化对象，new的时候执行，主要放一些公共属性
   - this代表当前实例化对象，谁new就代表谁
 
@@ -5196,6 +5370,50 @@ $：表示匹配行尾的文本（以谁结束）【/^abc$/：只能是abc】
 - 进度提示插件---NProgress
   - https://github.com/rstacruz/nprogress
   - 步骤：按照所给的步骤进行操作即可
+## 10-Ajax跨域请求
+
+### 10-01-同源政策
+
+- 满足的条件
+  - 协议相同（http  HTTPS）
+  - 域名相同
+  - 端口相同（http默认80端口，https默认443端口）
+- 注意：域名和域名对应IP也是非同源，比如localhost对应127.0.01都指向自己的地址，但是属于不同源
+- 非同源，共有三种行为受到限制
+  - Cookie无法读取。
+  - DOM无法获得
+  - AJAX请求无效（可以发送，但是浏览器拒绝接受）
+
+### 10-02-跨域请求及解决方案
+
+#### 10-02-01-跨域简介
+
+- 在发送Ajax请求的时候，请求的地址只要违反了同源政策，那么就属于跨域请求。
+
+#### 10-02-02-实现跨域请求的方案
+
+- **html标签中的src属性可以解决跨域问题**
+- **jsonp实现跨域请求**
+- **jQuery封装的ajax方法跨域请求**
+
+  - 在发送ajax请求时将**dataType:"json"**改为**dataType:"jsonp"**即可
+
+- **实现跨域请求的方案--CORS**
+
+  - 前端发送ajax请求，还是照常发送即可，不需要做任何设置就行。
+
+  - 在服务器被请求的接口中设置header头，可以实现跨域，不过这种方式只有最新的浏览器（IE10）才支持。
+
+    - 语法：
+
+      ```shell
+       // res.setHeader('Access-Control-Allow-Origin', '允许请求的网址');
+          // res.setHeader('Access-Control-Allow-Origin', '*');
+      ```
+
+  - 这种方案无需客户端作出任何变化（客户端不用改代码），只是在被请求的服务端响应的时候添加一个 `Access-Control-Allow-Origin` 的响应头，表示这个资源是否允许指定域请求。
+
+    
 
 # Node.js
 
@@ -5546,6 +5764,113 @@ server.on('request', (req, res) => {
 - 本地安装
   - 如果一个模块需要通过 `require()` 加载使用，这个模块必须本地安装
   - 本地安装的模块，可以在当前目录中，及它的后代目录中都可以使用
+
+#### 02-01-00-有关npm的补充
+
+- 下载：
+
+  - 先进行初始化
+
+    ```shell
+    npm init -y
+    npm init --yes
+    npm init
+    ```
+
+  - package.json
+
+    - 在初始化之后，会生成一个package.json文件
+    - main：main字段指定了加载的入口文件
+    - dependencies 依赖(复数)
+      - 指定了当前项目所依赖（需要）的包
+      - 软件的版本号 jQuery@3.3.1
+        1. 大版本.次要版本.小版本
+        2. **小版本**：当项目在进行了局部修改或 bug 修正时，修正版本号加 1
+        3. **次要版本**：当项目在原有的基础上增加了部分功能时，主版本号不变，子版本号加 1
+        4. **大版本**：当项目在进行了重大修改或局部修正累积较多，而导致项目整体发生全局变化时，主版本号加 1
+      - **使用 `npm install` 可以安装所有的依赖**
+
+  - 再安装
+
+- 卸载
+
+  ```shell
+  npm un 包名 -g
+  npm uninstall 包名 -g
+  ```
+
+#### 02-01-01-关于安装第三方包的补充
+
+- 安装第三方包
+
+  ```shell
+  #老版本的node安装，后面加--save，是为了把安装的第三方模块在package.json中做记录，新版不用
+  npm install 包名 --save
+  #正常的安装
+  npm install 包名 --save
+  #一次安装多个包，名字之间用空格隔开
+  npm install 包名1  包名2  包名3
+  #指定包的版本进行安装
+  npm install 包名@版本号
+  # 简写
+  npm i
+  ```
+
+  
+
+- 从缓冲目录安装包
+
+  ```shell
+  #查看缓冲目录
+  npm config get cache
+  #从缓冲目录下载包
+  #--cache-min后面跟的是时间，单位是分钟，超过这个时间才去服务器下载
+  npm install 包名 --cache-min 99999
+  ```
+
+  
+
+- 查看全局安装目录
+
+  ```shell
+  #查看全局安装目录
+  npm root -g
+  ```
+
+#### 02-01-02-切换 npm 镜像源
+
+- npm 存储包文件的服务器在国外，速度很慢，所以我们需要解决这个问题。
+
+- 国内淘宝的开发团队把 npm 在国内做了一个备份，网址是：http://npm.taobao.org/。
+
+  ```bash
+  # 查看当前的源
+  npm config ls
+  # 在上面命令的结果有，有下面一行，该行记录的网站就是我们安装第三方模块的网站
+  # registry = "https://registry.npmjs.org/"
+  
+  # 下载包的时候切换源
+  npm install express --registry=https://registry.npm.taobao.org
+  # 全局设置
+  npm config set registry https://registry.npm.taobao.org
+  # 原始的路径
+  # https://registry.npmjs.org/
+  # nrm 是管理镜像源的模块，通过nrm来管理镜像源
+  npm i nrm # 自行查询如何使用 
+  ```
+
+#### 02-01-03- require 的加载机制
+
+- require` 优先加载**缓存**中的模块
+- 如果缓存中没有模块，优先加载**核心模块（node自带的模块，fs、path、http）**，并缓存
+- 如果有**相对路径**，则根据路径加载**文件模块**，并缓存
+  - `require('./main')`  省略扩展名的情况
+  - 先加载 `main.js`，如果没有再加载 `main.json`，如果没有再加载 `main.node`(c/c++编写的模块)
+- 如果不是文件模块，也不是核心模块，则加载**第三方模块（下载的，比如express/mysql等）**
+- node 会去 node_modules 目录中找（找跟你引用的名称一样的目录），例如这里 `require('moment')`
+- 如果在 node_modules 目录中找到 `moment` 目录，则加载该模块并缓存
+- 如果过程都找不到，node 则取上一级目录下找 `node_modules` 目录，规则同上
+- 如果一直找到代码文件的根路径还找不到，则报错
 
 ### 02-02-JSON和JS格式相互转换
 
@@ -5924,7 +6249,242 @@ select * from heroes where sex='女' order by age desc limit 3
   conn.end();
   ```
 
-  
+# Vue-基础
+
+## 01-Vue特点
+
+- 数据驱动视图，可以让我们只关注数据
+- MVVM双向绑定
+- 通过指令增强html功能
+- 组件化 复用代码
+- 开发者一般只需要关注数据
+
+## 02-Vue实例选项
+
+### 02-01-el
+
+- 作用：当前Vue实例所管理的视图
+
+- 值：通常是id选择器（或者是一个DOM对象）
+
+- **注意**：不要让el所管理的视图是html或者body
+
+  ```js
+  new Vue({
+   // el: '#app' ,  id选择器
+   // el: '.app',   class选择器
+   el: document.getElementById("app") // dom对象
+  })
+  ```
 
   
 
+### 02-02-data
+
+- data中的值为对象=》{数据名字：数据的初始值}
+
+- data中的数据msg/count可以在视图中通过{{msg/count}}访问数据
+
+- data中的数据也可以通过实例访问 vm.msg或者vm.$data.ms
+
+- ata中的数据特点:响应式的数据->data中的数据一旦发生变化->视图中使用该数据的位置就会发生变化
+
+  ```js
+  let vm = new Vue({
+  el: "#app",
+  data: {
+   msg: 'abc',
+   count: 100，
+   list:[1,2,3]
+  }
+  })	
+  vm.msg = 200
+  console.log(vm)
+  console.log(vm.msg)
+  console.log(vm.$data.msg)
+  ```
+
+  
+
+### 02-03-methods
+
+- methods其值为一个对象
+
+- 可以直接通过 VM 实例访问这些方法，或者在**指令表达式中使用**。
+
+- 因为methods中所有的方法 都被代理到了 Vue实例对象上  都可通过this访问
+
+- 注意，**不应该使用箭头函数来定义 method 函数**。理由是箭头函数绑定了父级作用域的上下文，所以 `this` 将不会按照期望指向 Vue 实例
+
+  ```js
+  let vm =new Vue({
+  el:"#app",
+  data:{
+  name:"Hello world",
+  name2:"Hello world2"
+  },
+  methods:{
+  // 常规函数写法
+  fn1:function(){
+      console.log(this.name)
+      
+  },
+  // es6 函数简写法
+  fn2() {
+      console.log(this.name2)
+  }
+  }
+  })
+  ```
+
+## 03-术语解释-插值表达式
+
+  > 作用:会将绑定的数据实时的显示出来
+  >
+  > 形式: 通过 **`{{ 插值表达式 }}`**包裹的形式 
+
+  > 用法:{{js表达式、三元运算符、方法调用等}}
+  >
+  > ```js
+  > // 正确写法
+  > // js表达式
+  > <p>{{ 1 + 2 + 3 }}</p>
+  > <p>{{ 1 > 2 }}</p>
+  > // name为data中的数据
+  > <p>{{ name + ':消息' }}</p> 
+  > // count 为data中的数据
+  > <p>{{ count === 1 }}</p>
+  > <p>{{ count === 1 ? "成立" : "不成立" }}</p>
+  > ```
+  >
+  > 
+
+```js
+<!-- 方法调用 -->
+<!-- fn为methods中的方法 -->
+<p>{{ fn() }}</p>
+```
+
+```js
+// 错误写法
+<!-- 这是语句，不是表达式 -->
+{{ var a = 1 }}
+<!-- 流控制不会生效，请使用三元表达式 -->
+{{ if (ok) { return message } }}
+```
+
+## 04-术语解释-指令（重要）
+
+### 04-01-v-text
+
+- 更新标签中的内容
+- 与插值表达式的区别：
+  - v-text更新整个标签中的内容
+  - 插值表达式：更新标签中局部的内容
+
+### 04-02-v-html
+
+- 更新标签中的内容/标签
+- 注意：尽量避免使用，容易造成危险（XSS跨站脚本攻击）
+
+```js
+<div id="app">
+<!-- v-text指令的值会替换标签内容 -->
+<p>{{str}}</p>
+<p v-text="str"></p>
+<p v-text="str">我是p标签中的内容</p>
+<p v-text="strhtml">我是p标签中的内容</p>
+<!-- v-html指令的值(包括标签字符串)会替换掉标签的内容 -->
+<p v-html="str"></p>
+<p v-html="strhtml">我是p标签中的内容</p>
+</div>
+<script src="./vue.js"></script>
+<script>
+new Vue({
+   el: '#app',
+   data: {
+       str: 'abc',
+       strhtml: '<span>content</span>'
+   }
+});
+</script>
+```
+
+
+
+### 04-03-v-if与v-show
+
+| 指令   | 作用                 | 区别                               |
+| ------ | -------------------- | ---------------------------------- |
+| v-if   | 页面元素的显示与隐藏 | 直接决定元素 的 添加 或者删除，    |
+| v-show | 页面元素的显示与隐藏 | v-show 只是根据样式来决定 显示隐藏 |
+
+- 如果需要非常频繁地切换，则使用 `v-show` 较好.
+- 如果在运行时条件很少改变，则使用 `v-if` 较好.
+
+
+
+## 05-v-on绑定事件
+
+- 基本使用
+
+  - 用法：v-on：事件名.修饰符=“方法名”
+  - 简写：@事件名.修饰符=“方法名”
+  - 修饰符：可以省略不写
+    - .prevent` - 调用 `event.preventDefault()` 阻止默认事件
+    - .once` - 只触发一次回调
+
+- 事件对象**(扩展)
+
+  - 第一种:方法名中采用$event的方式传形参 
+
+  ```js
+  // 调用的时候传$event
+  <button @click="fn($event)">按钮</button>
+  // 方法内接收
+  fn(e){
+   // e就是事件对象
+  }
+  ```
+
+  
+
+  - 第二种:**直接写事件名**  默认第一个参数为event事件参数
+
+  ```js
+  // 调用的时候 直接写事件名
+  <button @click="fn">按钮</button>
+  // 方法内第一个参数就是 事件对象
+  fn(e){
+   // e就是事件对象
+  }
+  ```
+
+## 06-v-for(数组和对象的循环)
+
+  - 基本用法
+
+      - v-for=“item  in  items”或者v-for=“item  of  items”
+      - item：数组中的项或者对象中的值
+      - items：当前的数组或者对象
+
+  - 循环数组时，有两个参数，分别为index和item
+
+      - v-for=“（item，index）  in  items“  :key="index"
+
+  - 循环数组时，有三个参数，分别为index,key,item
+
+      - v-for=“（item，key,index）  in  items“ :key="index"
+      - 此时的item为对象的属性，key为属性值
+
+  - 如果循环时不想添加额外的标签，可以使用**template函数**
+
+    
+
+
+
+  
+
+  
+
+  
