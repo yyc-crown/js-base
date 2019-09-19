@@ -1413,7 +1413,7 @@ console.log(res2);
 
   - filter() 方法创建一个新的数组，新数组中的元素是通过检查指定数组中符合条件的所有元素,主要用于筛选数组
 
-    注意它直接返回一个新数组
+    **注意它直接返回一个新数组**
 
   ```js
   
@@ -1533,7 +1533,7 @@ var arr = [1, 3, 5, 2, 4, 9, 6];
         new_arr_1.push(item);
     });
     console.log(new_arr_1);
- // 方法三：filter:数组过滤：满足条件返出来，返每个元素，返到新数组；
+ // 方法三：filter:数组过滤：满足条件返出来，返每个元素，返到新数组中；
     var new_arr_2 = arr.filter(function(item, index) {
         return true;
     })
@@ -1685,6 +1685,33 @@ var arr = [1, 3, 5, 2, 4, 9, 6];
   - `delete(value)`：删除某个值，返回一个布尔值，表示删除是否成功。
   - `has(value)`：返回一个布尔值，表示该值是否为`Set`的成员。
   - `clear()`：清除所有成员，没有返回值。
+
+### 02-11-map方法
+
+- 语法：arr.map(function(item,index){})
+
+- 作用：返回的结果为与原数组长度相等的新数组，但与原数组无关
+
+- 示例代码：
+
+  - 还可以将map中的函数写成箭头函数，里面的if结构简写为三元表达式
+
+  ```js
+   // 需求：将abc=>aBc
+          var str = 'abc';
+          var arr = str.split("");
+          console.log(arr.map(function(item, index) {
+              if (index === 1) {
+                  return item.toUpperCase()
+              } else {
+                  return item
+              }
+          }).join(""));
+  ```
+
+  
+
+
 
 ## 03-String
 
@@ -6414,10 +6441,10 @@ new Vue({
 
 ### 04-03-v-if与v-show
 
-| 指令   | 作用                 | 区别                               |
-| ------ | -------------------- | ---------------------------------- |
-| v-if   | 页面元素的显示与隐藏 | 直接决定元素 的 添加 或者删除，    |
-| v-show | 页面元素的显示与隐藏 | v-show 只是根据样式来决定 显示隐藏 |
+| 指令   | 作用                   | 区别                               |
+| ------ | ---------------------- | ---------------------------------- |
+| v-if   | 根据条件决定元素的显隐 | 直接决定元素 的 添加 或者删除，    |
+| v-show | 根据条件决定元素的显隐 | v-show 只是根据样式来决定 显示隐藏 |
 
 - 如果需要非常频繁地切换，则使用 `v-show` 较好.
 - 如果在运行时条件很少改变，则使用 `v-if` 较好.
@@ -6434,7 +6461,7 @@ new Vue({
     - .prevent` - 调用 `event.preventDefault()` 阻止默认事件
     - .once` - 只触发一次回调
 
-- 事件对象**(扩展)
+- **事件对象**(扩展)
 
   - 第一种:方法名中采用$event的方式传形参 
 
@@ -6481,10 +6508,317 @@ new Vue({
 
     
 
-
-
-  
+Vue项目：http://ttmp.research.itcast.cn/#/login
 
   
 
+## 07-v-bind
+
+### 07-01-基本介绍
+
+- 作用：绑定标签上的任意属性
+
+- 场景：当标签上的属性是变量、动态、需要改变的
+
+- 语法：
+
+  - v-bind：属性=‘数据中对象的属性名’
+  - 简写：**：属性=‘数据中对象的属性名’**
+  - 示例代码：
+
+  ```html
+  <p v-bind:id="ID"></p>   // ID为数据对象中的变量值 
+  or 
+  <p :id="ID"></p>  // 简写
+  <p  :class="Class"></p> // class的字符串语法
+  ```
+
   
+
+###   07-02-v-bind绑定class
+
+- **对象语法**：v-bind：class=“{class名：布尔值}”
+
+  ```html
+  <p :class="{left:showClass}"></p>
+  ```
+
+  
+
+- **数组语法**:v-bind:class="[class变量1，class变量2...]"
+
+  ```html
+  <p :class="[activeClass,selectClass]" class="default">内容</p>
+  ```
+
+- **字符串语法**：v-bind：class="{'字符串'，'字符串2'}"
+
+  ```html
+  <p :class="{'activeClass',selectClass'}" class="default">内容</p>
+  ```
+
+  
+
+- 注意：绑定class和原生class会进行合并，并且原生的class在前
+
+### 07-03-v-bind绑定style
+
+- **数组用法**:v-bind:style="[对象1，对象2....]"
+
+  - **注意 对象可以是多个属性的 集合  同样里面的css属性需要遵从小驼峰命名的规则**
+
+  
+
+- **对象语法**:v-bind:style="{css属性名：变量}"
+
+  ```html
+  <p :style="{fontSize:fontsize}"></p
+  ```
+
+- **注意：原生的style会和动态创建的style进行合并，并且原生的style在前，当原生的与动态创建的样式冲突时，使用动态创建的，后来者居上**
+
+## 08-v-model-数据的双向绑定
+
+### 08-01-基本用法
+
+- 作用：表单元素的绑定
+
+- 特点：数据的双向绑定
+
+  - 数据变化=》管理的视图变化
+  - 视图变化=》数据变化
+  - v-model会忽略所有表单元素的value、checked、selected特性的初始值而总是将Vue实例的数据作为数据来源，应该在data选项中声明初始值
+
+- 示例代码
+
+  ```html
+  <div id="app">
+          <p>{{name}}</p>
+          <input type="text" v-model="name">
+      </div>
+      <script src="./vue.js"></script>
+      <script>
+          // 1. 实例化一个Vue实例
+          // 2. 定义一个数据对象 name:张三
+          // 3. 使用v-model实现 input和p标签的数据双向同步
+          var vm = new Vue({
+              el: '#app',
+              data: {
+                  name: "张三"
+              },
+              methods: {}
+          });
+  ```
+
+  
+
+### 08-02-语法糖原理
+
+```html
+<div id="app">
+<input type="text" @input="changeInput" :value="name" />
+{{ name }}
+</div>
+<script src="./vue.js"></script>
+<script> 
+var vm = new Vue({
+el: "#app",
+data: {
+name: "张三"
+},
+methods: {
+changeInput(event) {
+  // 值发生改变时 会触发这个方法
+  //  去value值
+  this.name = event.target.value;
+}
+}
+});
+</script><div id="app">
+<input type="text" @input="changeInput" :value="name" />
+{{ name }}
+</div>
+<script src="./vue.js"></script>
+<script> 
+var vm = new Vue({
+el: "#app",
+data: {
+name: "张三"
+},
+methods: {
+changeInput(event) {
+  // 值发生改变时 会触发这个方法
+  //  去value值
+  this.name = event.target.value;
+}
+}
+});
+</script>
+```
+
+### 08-03-绑定其它表单元素
+
+```html
+<div id="app">
+        <!-- 2. input 绑定 属性 nameInput,实现input同步 -->
+        <p>{{nameInput}}</p>
+        <input type="text" v-model="nameInput">
+        <!-- 3. textarea 绑定 属性 nameTextArea 实现textarea同步 -->
+        <p>{{nameTextArea}}</p>
+        <textarea v-model="nameTextArea" name="" id="" cols="30" rows="10"></textarea>
+        <!--   4. checkbox 绑定一个属性 nameCheckbox 实现 checkbox同步-->
+        <p>{{nameCheckbox}}</p>
+        <input type="checkbox" v-model="nameCheckbox">是否同意
+
+        <!-- 5. 多个 checkbox绑定同一个属性 nameCheckboxs 实现 checkbox同步   北京 上海 天津 -->
+        <p>{{nameCheckboxs}}</p>
+        <input type="checkbox" value="北京" v-model="nameCheckboxs">北京
+        <input type="checkbox" value="上海" v-model="nameCheckboxs">上海
+        <input type="checkbox" value="天津" v-model="nameCheckboxs">天津
+
+
+        <!--  //  6. radio 绑定属性 nameRadio 实现同步  男 女  -->
+        <p>{{nameRadio}}</p>
+        <input type="radio" v-model="nameRadio" value="男">男
+        <input type="radio" v-model="nameRadio" value="女 ">女
+        <!-- 7. select  绑定属性 nameSelect 实现同步  北京 上海 天津  -->
+        <p>{{nameSelect}}</p>
+        <select name="" id="" v-model="nameSelect">
+            <option value="北京">北京</option>
+            <option value="上海">上海 </option>
+            <option value="天津">天津 </option>
+        </select>
+
+
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        //  1. 实例化一个Vue实例
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                nameInput: '狗蛋',
+                nameTextArea: '哈哈哈',
+                nameCheckbox: true,
+                nameCheckboxs: [],
+                nameRadio: "女",
+                nameSelect: "上海"
+            },
+            methods: {}
+        });
+    </script>
+```
+
+## 09-v-cloak和v-once
+
+### 09-01-v-cloak
+
+- 场景：解决页面初次渲染，页面模板闪烁现象
+- 步骤：
+  -   编写元素标签
+  -  写入v-cloak指令
+  - 将v-cloak指令 属性加上style 
+
+### 09-02-v-once
+
+- 作用: 使得所在元素只渲染一次  
+- 场景:静态化数据 
+
+## 10-过滤器
+
+### 10-01-全局过滤器
+
+- 语法：
+  - 在创建Vue实例之前定义全局过滤器Vue.filter()
+  - Vue.filter('该过滤器的名字',(要过滤的数据)=>{return 对数据的处理结果});
+  - 在视图中通过{{数据 | 过滤器的名字}}或者v-bind使用过滤器
+
+- 代码
+
+  ```js
+  Vue.filter("toUpper", function(value) {
+  return value.charAt(0).toUpperCase() + value.substr(1);
+  });// 过滤器核心代码
+  ```
+
+  ```html
+  <p>{{ text | toUpper }}</p>  // 常规用法
+  or
+  <p>
+  {{
+  text
+    .split("")
+    .reverse()
+    .join("") | toUpper
+  }}
+  </p>  // 将字符串翻转
+  ```
+
+- 全局过滤器 多个Vue实例可共享使用
+
+### 10-02-局部过滤器
+
+- 语法：
+  - 在vm对象的选项中配置过滤器filters:{}
+  - (key)过滤器的名字: (value)(要过滤的数据)=>{return 过滤的结果}
+  - 在视图中使用过滤器:  {{被过滤的数据 | 过滤器的名字}}
+
+- 代码
+
+  ```js
+  filters: {
+  toUpper(value) {
+    return value.charAt(0).toUpperCase() + value.substr(1);
+  }
+  ```
+
+- 注意：局部过滤器只能在当前Vue实例视图上使用
+
+### 10-03-过滤器-传参数和串联使用
+
+- 过滤器中可以传参数，第一个参数永远是前面传递过来的过滤值
+- 过滤器也可以多个串联起来并排使用，后面的过滤器中的value是前一个过滤器返的值
+- debugger => 会在调试时 自动进入 该断点  => 调试完毕之后 debugger要删除
+
+```js
+<p>{{ text | toUpper(2) }}</p>  
+// index为传入的参数 
+toUpper(value, index) {
+   return value
+     .split("")
+     .map(function(item, i) {
+       if (i === index) {
+         return item.toUpperCase();
+       }
+       return item;
+     })
+     .join("");
+ }
+} // 根据传入的索引找到对应的字母换成大写字母
+```
+
+- 串行使用过滤器
+
+  ```html
+  <p>{{ text | toUpper(2) | reverse }}</p> // 语法 多个过滤器用 | 分割
+  ```
+
+  
+
+## 11-ref 操作DOM
+
+- 作用: 通过ref特性可以获取元素的dom对象
+- 使用:  给元素定义 ref属性, 然后通过$refs.名称 来获取dom对象
+- $refs是Vue实例的属性 
+- $data/$event => $开头的属性和方法都是Vue实例的方法和属性
+
+```HTML
+<input type="text" ref="myInput" /> // 定义ref
+```
+
+```js
+focus() {
+this.$refs.myInput.focus();
+}  // 获取dom对象 聚焦
+```
+
